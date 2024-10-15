@@ -575,6 +575,7 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
     // TODO: agregar las claves sin espacio y todo en mayúsculas
     map<string, int> mapaConPosiciones;
 
+
     ifstream archivo(rutaArchivo);
     // TODO: manejar la excepción. Throw a dónde? Al SNIESController?
     if (!(archivo.is_open()))
@@ -610,8 +611,6 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
     */
 
     return mapaConPosiciones;
-
-
 }
 
 int GestorCsv::conseguirCantColumnas(map<string, int> mapa) {
@@ -634,3 +633,46 @@ string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
 
     return cadena;
 }
+
+/*
+    CÓDIGO DE LA INSTITUCIÓN
+    CÓDIGO DE LA INSTITUCIÓN
+    IES_PADRE
+    INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
+    PRINCIPAL O SECCIONAL
+    ID SECTOR IES
+    SECTOR IES
+    ID CARACTER
+    CARACTER IES
+    CÓDIGO DEL DEPARTAMENTO (IES)
+    DEPARTAMENTO DE DOMICILIO DE LA IES
+    CÓDIGO DEL MUNICIPIO IES
+    MUNICIPIO DE DOMICILIO DE LA IES
+    CÓDIGO SNIES DEL PROGRAMA
+    PROGRAMA ACADÉMICO
+    ID NIVEL ACADÉMICO
+    NIVEL ACADÉMICO
+    ID NIVEL DE FORMACIÓN
+    NIVEL DE FORMACIÓN
+    ID METODOLOGÍA
+    METODOLOGÍA
+    ID ÁREA
+    ÁREA DE CONOCIMIENTO
+    ID NÚCLEO
+    NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
+    ID CINE CAMPO AMPLIO
+    DESC CINE CAMPO AMPLIO
+    ID CINE CAMPO ESPECIFICO
+    DESC CINE CAMPO ESPECIFICO
+    ID CINE CODIGO DETALLADO
+    DESC CINE CODIGO DETALLADO
+    CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
+    DEPARTAMENTO DE OFERTA DEL PROGRAMA
+    CÓDIGO DEL MUNICIPIO (PROGRAMA)
+    MUNICIPIO DE OFERTA DEL PROGRAMA
+    ID SEXO
+    SEXO
+    AÑO
+    SEMESTRE
+    ADMITIDOS
+     */
