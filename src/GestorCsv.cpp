@@ -38,6 +38,12 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
     // Mantenimiento: Se pueden mejorar los nombres de las variables.
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    cout << "Posicion Codigo SNIES: " << POS_COD_SNIES << endl;
+    int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
+
     ifstream archivoPrimero(rutaCompleta);
     if (!(archivoPrimero.is_open()))
     {
@@ -52,13 +58,17 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
         int columna;
         vector<int>::iterator it;
 
+        // Conseguir posiciones de las columnas
+
+
         // Primera iteracion del ciclo para guardar las etiquetas
         getline(archivoPrimero, fila);
-        vectorFila = vector<string>(39);
+        vectorFila = vector<string>(TAMANIO_ARCHIVO);
         streamFila = stringstream(fila);
         columna = 0;
         while ((getline(streamFila, dato, ';')))
         {
+
             vectorFila[columna] = dato;
             columna++;
         }
@@ -69,14 +79,14 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
         {
             streamFila = stringstream(fila);
             columna = 0;
-            while ((getline(streamFila, dato, ';')) && (columna < 13))
+            while ((getline(streamFila, dato, ';')) && (columna <= POS_COD_SNIES))
             {
                 vectorFila[columna] = dato;
                 columna++;
             }
 
             // Verificamos que la fila no sea una fila de error
-            if (vectorFila[12] != "Sin programa especifico")
+            if (vectorFila[POS_COD_SNIES] != "Sin programa especifico")
             {
                 it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12]));
             }
@@ -559,4 +569,68 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
 
     archivoExtra.close();
     return estadoCreacion;
+}
+
+map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
+    // TODO: agregar las claves sin espacio y todo en mayúsculas
+    map<string, int> mapaConPosiciones;
+
+    ifstream archivo(rutaArchivo);
+    // TODO: manejar la excepción. Throw a dónde? Al SNIESController?
+    if (!(archivo.is_open()))
+    {
+        cout << "Archivo " << rutaArchivo << " no se pudo abrir correctamente" << endl;
+    }
+    else {
+        string fila;
+        string dato;
+        vector<string> vectorFila;
+        stringstream streamFila;
+        int columna;
+
+
+        // Primera iteracion del ciclo para guardar las etiquetas
+        getline(archivo, fila);
+        streamFila = stringstream(fila);
+        columna = 0;
+        while ((getline(streamFila, dato, ';')))
+        {
+            dato = quitarEspacioYAgregarMayus(dato);
+            mapaConPosiciones[dato] = columna;
+            columna++;
+        }
+    }
+    archivo.close();
+
+    // Imprimir el mapa
+    /*
+    for (const auto& par : mapaConPosiciones) {
+        cout << "Nombre: " << par.first << ", Posicion: " << par.second << endl;
+    }
+    */
+
+    return mapaConPosiciones;
+
+
+}
+
+int GestorCsv::conseguirCantColumnas(map<string, int> mapa) {
+    int maxPosicion = 0;
+
+    // Recorrer el mapa y encontrar la posición más grande
+    for (const auto& par : mapa) {
+        if (par.second > maxPosicion) {
+            maxPosicion = par.second;
+        }
+    }
+    cout << "La posicion mas grande es: " << maxPosicion << endl;
+
+    return maxPosicion;
+}
+
+string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
+    std::transform(cadena.begin(), cadena.end(), cadena.begin(), ::toupper);
+    std::replace(cadena.begin(), cadena.end(), ' ', '_');
+
+    return cadena;
 }

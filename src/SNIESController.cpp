@@ -77,6 +77,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         Consolidado *consolidado[4];
         for (int m = 0; m < 4; ++m)
         {
+
             consolidado[m] = new Consolidado();
             consolidado[m]->setIdSexo(stoi(programasAcademicosVector[i + m][34]));
             consolidado[m]->setSexo(programasAcademicosVector[i + m][35]);
