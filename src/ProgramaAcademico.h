@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include "Consolidado.h"
 
@@ -11,6 +12,7 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
+using std::map;
 
 class ProgramaAcademico
 {
@@ -48,6 +50,9 @@ class ProgramaAcademico
     string departamentoDeOfertaDelPrograma;
     int codigoDelMunicipioPrograma;
     string municipioDeOfertaDelPrograma;
+
+    map<int, map<int, map<int, Consolidado *>>> mapConsolidados;
+    // TODO: borrar linea de vector de consolidados
     vector<Consolidado *> consolidados;
 
 public:
