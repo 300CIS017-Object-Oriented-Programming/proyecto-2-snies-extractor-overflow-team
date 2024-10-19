@@ -87,9 +87,9 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
         programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
     }
-    // cout << "despues crear programas academicos" << endl;
+
     programasAcademicosVector = gestorCsvObj.leerArchivoSegunda(rutaAdmitidos, ano2, codigosSnies);
-    // cout << "despues leer archivos segunda" << endl;
+
     for (int j = 0; j < programasAcademicosVector.size(); j += 4)
     {
         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[j][0]));

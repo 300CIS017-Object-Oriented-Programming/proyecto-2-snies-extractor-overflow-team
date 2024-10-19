@@ -138,6 +138,12 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"] + 1;
+    int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
+
     ifstream archivoSegundo(rutaCompleta);
     if (!(archivoSegundo.is_open()))
     {
@@ -162,9 +168,9 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
             streamFila = stringstream(fila);
             columnaArchivo = 0;
             columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < 13))
+            while (getline(streamFila, dato, ';') && columnaArchivo < POS_COD_SNIES + 1)
             {
-                if (columnaArchivo == 12)
+                if (columnaArchivo == POS_COD_SNIES)
                 {
                     vectorFila[columnaVector] = dato;
                     columnaVector++;
@@ -189,7 +195,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
                 columnaArchivo++; // Esto se debe a la iteracion en que hacemos getline sin subirle a la columaArchivo porque nos salimos del bucle
                 while (getline(streamFila, dato, ';'))
                 {
-                    if (columnaArchivo >= 34)
+                    if (columnaArchivo >= POS_ID_SEXO)
                     {
                         vectorFila[columnaVector] = dato;
                         columnaVector++;
@@ -207,7 +213,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
                     columnaVector = 0;
                     while (getline(streamFila, dato, ';'))
                     {
-                        if ((columnaArchivo >= 34) || (columnaArchivo == 12))
+                        if ((columnaArchivo >= POS_ID_SEXO) || (columnaArchivo == POS_COD_SNIES))
                         {
                             vectorFila[columnaVector] = dato;
                             columnaVector++;
@@ -230,6 +236,7 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
     map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
     int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"] + 1;
@@ -299,7 +306,7 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
 
                     // MIRAR ULTIMA COLUMNA QUE ESTA VACIA. HACER UNA FORMA DE QUE LLEGUE HASTA LA ULTIMA COLUMNA Y YA
 
-                    while ((getline(streamFila, dato, ';')) && (columnaArchivo < (POS_SEMESTRE)))
+                    while (getline(streamFila, dato, ';') && columnaArchivo < POS_SEMESTRE)
                     {
                         if (columnaArchivo == POS_COD_SNIES)
                         {
