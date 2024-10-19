@@ -141,7 +141,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
 
     map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-    int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"] + 1;
+    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
     int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
 
     ifstream archivoSegundo(rutaCompleta);
@@ -239,7 +239,8 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
 
     map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-    int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"] + 1;
+    // FIXME: Buscar una forma para que la posición de la última columna no tenga que estar obligatoriamente a la derecha de semestre.
+    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
 
     ifstream archivoSegundo(rutaCompleta);
     if (!(archivoSegundo.is_open()))
@@ -306,7 +307,7 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
 
                     // MIRAR ULTIMA COLUMNA QUE ESTA VACIA. HACER UNA FORMA DE QUE LLEGUE HASTA LA ULTIMA COLUMNA Y YA
 
-                    while (getline(streamFila, dato, ';') && columnaArchivo < POS_SEMESTRE)
+                    while (getline(streamFila, dato, ';') && columnaArchivo < POS_ULTIMA_COLUMNA)
                     {
                         if (columnaArchivo == POS_COD_SNIES)
                         {
