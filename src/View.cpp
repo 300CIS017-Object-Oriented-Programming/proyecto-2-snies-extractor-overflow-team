@@ -7,14 +7,7 @@ View::View()
     // NEW quitar estas variables de aquí y del constructor del SNIESController
     //  estas constantes las leerá el SNIESController del archivo de Settings.h
     //  Completar el archivo con el resto de constantes necesarias
-    string ruta1 = string("C:/SNIES_EXTRACTOR/inputs/programas.csv");
-    string ruta2 = string("C:/SNIES_EXTRACTOR/inputs/admitidos");
-    string ruta3 = string("C:/SNIES_EXTRACTOR/inputs/graduados");
-    string ruta4 = string("C:/SNIES_EXTRACTOR/inputs/inscritos");
-    string ruta5 = string("C:/SNIES_EXTRACTOR/inputs/matriculados");
-    string ruta6 = string("C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre");
-    string ruta7 = string("C:/SNIES_EXTRACTOR/outputs/");
-    controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
+    controlador = SNIESController();
 }
 
 // Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
