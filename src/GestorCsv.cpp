@@ -41,6 +41,7 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
 
     map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+
     cout << "Posicion Codigo SNIES: " << POS_COD_SNIES << endl;
     int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
 
@@ -128,19 +129,6 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
 
     archivoPrimero.close();
 
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
     return matrizResultado;
 }
 
@@ -150,6 +138,12 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
+    int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
+
     ifstream archivoSegundo(rutaCompleta);
     if (!(archivoSegundo.is_open()))
     {
@@ -174,9 +168,9 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
             streamFila = stringstream(fila);
             columnaArchivo = 0;
             columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < 13))
+            while (getline(streamFila, dato, ';') && columnaArchivo < POS_COD_SNIES + 1)
             {
-                if (columnaArchivo == 12)
+                if (columnaArchivo == POS_COD_SNIES)
                 {
                     vectorFila[columnaVector] = dato;
                     columnaVector++;
@@ -201,7 +195,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
                 columnaArchivo++; // Esto se debe a la iteracion en que hacemos getline sin subirle a la columaArchivo porque nos salimos del bucle
                 while (getline(streamFila, dato, ';'))
                 {
-                    if (columnaArchivo >= 34)
+                    if (columnaArchivo >= POS_ID_SEXO)
                     {
                         vectorFila[columnaVector] = dato;
                         columnaVector++;
@@ -219,7 +213,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
                     columnaVector = 0;
                     while (getline(streamFila, dato, ';'))
                     {
-                        if ((columnaArchivo >= 34) || (columnaArchivo == 12))
+                        if ((columnaArchivo >= POS_ID_SEXO) || (columnaArchivo == POS_COD_SNIES))
                         {
                             vectorFila[columnaVector] = dato;
                             columnaVector++;
@@ -233,33 +227,21 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
         }
     }
 
-    /*
-    Ejemplo de matrizResultado: (No tendría las etiquetas incluidas)
-    CodigoSnies;IdSexo;SexoString;Ano;Semestre;Admitidos
-    1; 1; Masculino; 2022; 1, 56
-    */
     archivoSegundo.close();
 
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
     return matrizResultado;
 }
 
-vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies)
+vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies)
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    // FIXME: Buscar una forma para que la posición de la última columna no tenga que estar obligatoriamente a la derecha de semestre.
+    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
+
     ifstream archivoSegundo(rutaCompleta);
     if (!(archivoSegundo.is_open()))
     {
@@ -284,9 +266,9 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
             streamFila = stringstream(fila);
             columnaArchivo = 0;
             columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < (colmunaCodigoSnies + 1)))
+            while ((getline(streamFila, dato, ';')) && (columnaArchivo < (POS_COD_SNIES + 1)))
             {
-                if (columnaArchivo == colmunaCodigoSnies)
+                if (columnaArchivo == POS_COD_SNIES)
                 {
                     vectorFila[columnaVector] = dato;
                     columnaVector++;
@@ -310,8 +292,9 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
                 // Terminar de leer primera fila
                 while (getline(streamFila, dato, ';'))
                 {
+                    vectorFila[columnaVector] = dato;
                 }
-                vectorFila[columnaVector] = dato;
+
                 matrizResultado.push_back(vectorFila);
 
                 // Leer las otras 3 filas
@@ -321,9 +304,12 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
                     streamFila = stringstream(fila);
                     columnaArchivo = 0;
                     columnaVector = 0;
-                    while (getline(streamFila, dato, ';'))
+
+                    // MIRAR ULTIMA COLUMNA QUE ESTA VACIA. HACER UNA FORMA DE QUE LLEGUE HASTA LA ULTIMA COLUMNA Y YA
+
+                    while (getline(streamFila, dato, ';') && columnaArchivo < POS_ULTIMA_COLUMNA)
                     {
-                        if (columnaArchivo == colmunaCodigoSnies)
+                        if (columnaArchivo == POS_COD_SNIES)
                         {
                             vectorFila[columnaVector] = dato;
                             columnaVector++;
@@ -334,36 +320,13 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
                     matrizResultado.push_back(vectorFila);
                 }
             }
-            else // Caso cuando NO es parte de los que me interesan
-            {
-                /*// Saltarme las 3 siguientes filas con mismo codigo Snies
-                for (int j = 0; j < 3; j++)
-                {
-                    getline(archivoSegundo, fila);
-                }*/
-            }
+
         }
     }
 
-    /*
-    Ejemplo de matrizResultado: (No tendría las etiquetas incluidas)
-    CodigoSnies;DatoExtradelArchivo
-    12;5
-    */
+
     archivoSegundo.close();
-    /*// Imprimir matriz resultado para verificaciones
-    for (int h = 0; h < matrizResultado.size(); h++)
-    {
-        for (int k = 0; k < matrizResultado[h].size(); k++)
-        {
-            cout << matrizResultado[h][k];
-            if (k != (matrizResultado[h].size() - 1))
-            {
-                cout << ";";
-            }
-        }
-        cout << endl;
-    }*/
+
     return matrizResultado;
 }
 
@@ -575,6 +538,7 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
     // TODO: agregar las claves sin espacio y todo en mayúsculas
     map<string, int> mapaConPosiciones;
 
+
     ifstream archivo(rutaArchivo);
     // TODO: manejar la excepción. Throw a dónde? Al SNIESController?
     if (!(archivo.is_open()))
@@ -604,14 +568,13 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
 
     // Imprimir el mapa
     /*
+    cout << "" << endl;
     for (const auto& par : mapaConPosiciones) {
         cout << "Nombre: " << par.first << ", Posicion: " << par.second << endl;
     }
     */
 
     return mapaConPosiciones;
-
-
 }
 
 int GestorCsv::conseguirCantColumnas(map<string, int> mapa) {
@@ -634,3 +597,46 @@ string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
 
     return cadena;
 }
+
+/*
+    CÓDIGO DE LA INSTITUCIÓN
+    CÓDIGO DE LA INSTITUCIÓN
+    IES_PADRE
+    INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
+    PRINCIPAL O SECCIONAL
+    ID SECTOR IES
+    SECTOR IES
+    ID CARACTER
+    CARACTER IES
+    CÓDIGO DEL DEPARTAMENTO (IES)
+    DEPARTAMENTO DE DOMICILIO DE LA IES
+    CÓDIGO DEL MUNICIPIO IES
+    MUNICIPIO DE DOMICILIO DE LA IES
+    CÓDIGO SNIES DEL PROGRAMA
+    PROGRAMA ACADÉMICO
+    ID NIVEL ACADÉMICO
+    NIVEL ACADÉMICO
+    ID NIVEL DE FORMACIÓN
+    NIVEL DE FORMACIÓN
+    ID METODOLOGÍA
+    METODOLOGÍA
+    ID ÁREA
+    ÁREA DE CONOCIMIENTO
+    ID NÚCLEO
+    NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
+    ID CINE CAMPO AMPLIO
+    DESC CINE CAMPO AMPLIO
+    ID CINE CAMPO ESPECIFICO
+    DESC CINE CAMPO ESPECIFICO
+    ID CINE CODIGO DETALLADO
+    DESC CINE CODIGO DETALLADO
+    CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
+    DEPARTAMENTO DE OFERTA DEL PROGRAMA
+    CÓDIGO DEL MUNICIPIO (PROGRAMA)
+    MUNICIPIO DE OFERTA DEL PROGRAMA
+    ID SEXO
+    SEXO
+    AÑO
+    SEMESTRE
+    ADMITIDOS
+     */
