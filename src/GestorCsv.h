@@ -24,7 +24,7 @@ public:
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);
-    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies);
+    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies);
     bool crearArchivo(string &, map<int, ProgramaAcademico*>&, vector<string>) override;
     bool crearArchivoBuscados(string &, list<ProgramaAcademico*>&, vector<string>) override;
     bool crearArchivoExtra(string &, vector<vector<string>>) override;
