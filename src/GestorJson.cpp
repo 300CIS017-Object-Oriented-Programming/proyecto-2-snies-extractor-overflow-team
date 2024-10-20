@@ -4,10 +4,11 @@
 
 #include "GestorJson.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+bool GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "resultados.json";
@@ -87,7 +88,7 @@ bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
     return estadoCreacion;
 }
 
-bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
+bool GestorJson::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "buscados.csv";
@@ -162,7 +163,7 @@ bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &pr
     return estadoCreacion;
 }
 
-bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "extras.csv";

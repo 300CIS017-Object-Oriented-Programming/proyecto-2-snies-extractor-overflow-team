@@ -10,5 +10,6 @@ add_executable(SNIES_extractor_V2 src/Settings.h src/ProgramaAcademico.h src/Pro
         src/GestorTxt.cpp
         src/GestorTxt.h
         src/GestorJson.cpp
-        src/GestorJson.h)
+        src/GestorJson.h
+        src/GestorBase.h)
 

@@ -3,6 +3,7 @@
 //
 
 #include "GestorTxt.h"
+#include "GestorCsv.h"
 #include <iostream>
 #include <fstream>
 
