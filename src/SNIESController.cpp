@@ -1,11 +1,11 @@
 #include "SNIESController.h"
 
-using namespace std;
+ using namespace std;
 
 SNIESController::SNIESController(string &nuevaRutaProgramasCSV, string &nuevaRutaAdmitidos, string &nuevaRutaGraduados, string &nuevaRutaInscritos, string &nuevaRutaMatriculadosc, string &nuevaRutaMatriculadosPrimerSemestre, string &nuevaRutaOutput)
 {
     // FIXME quitar los parámetros de las rutas de los parametros del constructor, usar el archivo de settings.h para poner las constantes
-    gestorCsvObj = GestorCsv();
+    gestorCsvObj = new GestorCsv();
     rutaProgramasCSV = nuevaRutaProgramasCSV;
     rutaAdmitidos = nuevaRutaAdmitidos;
     rutaGraduados = nuevaRutaGraduados;
@@ -31,9 +31,9 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     int posicion;
     int columna;
     // cout << "antes leer programas csv" << endl;
-    codigosSnies = gestorCsvObj.leerProgramasCsv(rutaProgramasCSV);
+    codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
     // cout << "despues leer programas csv" << endl;
-    programasAcademicosVector = gestorCsvObj.leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
+    programasAcademicosVector = gestorCsvObj->leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
     // cout << "despues leer archivos Primera" << endl;
     etiquetasColumnas = programasAcademicosVector[0];
 
@@ -77,6 +77,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         Consolidado *consolidado[4];
         for (int m = 0; m < 4; ++m)
         {
+
             consolidado[m] = new Consolidado();
             consolidado[m]->setIdSexo(stoi(programasAcademicosVector[i + m][34]));
             consolidado[m]->setSexo(programasAcademicosVector[i + m][35]);
@@ -87,9 +88,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
         programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
     }
-    // cout << "despues crear programas academicos" << endl;
-    programasAcademicosVector = gestorCsvObj.leerArchivoSegunda(rutaAdmitidos, ano2, codigosSnies);
-    // cout << "despues leer archivos segunda" << endl;
+    programasAcademicosVector = gestorCsvObj->leerArchivoSegunda(rutaAdmitidos, ano2, codigosSnies);
     for (int j = 0; j < programasAcademicosVector.size(); j += 4)
     {
         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[j][0]));
@@ -111,7 +110,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
     // cout << "despues crear todos los consolidados" << endl;
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaGraduados, ano1, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, ano1, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -128,7 +127,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaGraduados, ano2, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaGraduados, ano2, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -145,7 +144,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaInscritos, ano1, codigosSnies, 12);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, ano1, codigosSnies);
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
         map<int, ProgramaAcademico *>::iterator it = programasAcademicos.find(stoi(programasAcademicosVector[k][0]));
@@ -160,17 +159,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
             }
         }
     }
-
-    if (ano2 == "2022")
-    {
-        columna = 12;
-    }
-    else
-    {
-        columna = 13;
-    }
-
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaInscritos, ano2, codigosSnies, columna);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaInscritos, ano2, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -187,7 +176,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaMatriculados, ano1, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, ano1, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -204,7 +193,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaMatriculados, ano2, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculados, ano2, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -221,7 +210,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaMatriculadosPrimerSemestre, ano1, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, ano1, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -238,7 +227,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         }
     }
 
-    programasAcademicosVector = gestorCsvObj.leerArchivo(rutaMatriculadosPrimerSemestre, ano2, codigosSnies, 13);
+    programasAcademicosVector = gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, ano2, codigosSnies);
 
     for (int k = 0; k < programasAcademicosVector.size(); k += 4)
     {
@@ -256,7 +245,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     }
 
     bool archivoCreado;
-    archivoCreado = gestorCsvObj.crearArchivo(rutaOutput, programasAcademicos, etiquetasColumnas);
+    archivoCreado = gestorCsvObj->crearArchivo(rutaOutput, programasAcademicos, etiquetasColumnas);
     // cout << archivoCreado << endl;
 }
 
@@ -279,7 +268,7 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
     if (flag)
     {
         bool creado;
-        creado = gestorCsvObj.crearArchivoBuscados(rutaOutput, listaProgramas, etiquetasColumnas);
+        creado = gestorCsvObj->crearArchivoBuscados(rutaOutput, listaProgramas, etiquetasColumnas);
     }
 }
 
@@ -416,6 +405,6 @@ void SNIESController::calcularDatosExtra(bool flag)
     if (flag)
     {
         bool creado;
-        creado = gestorCsvObj.crearArchivoExtra(rutaOutput, matrizFinal);
+        creado = gestorCsvObj->crearArchivoExtra(rutaOutput, matrizFinal);
     }
 }

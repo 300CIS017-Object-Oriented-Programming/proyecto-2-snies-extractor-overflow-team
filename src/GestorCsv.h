@@ -1,6 +1,7 @@
 #ifndef GESTOR_CSV_H
 #define GESTOR_CSV_H
 
+#include "GestorBase.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -15,7 +16,7 @@
 // Recomendación Linter: Se debe evitar el uso de using namespace en archivos de cabecera
 using namespace std;
 
-class GestorCsv
+class GestorCsv : public GestorBase
 {
 public:
     GestorCsv() = default;
@@ -23,10 +24,13 @@ public:
     // Mantenimiento: Se puede mejorar la firma y nombre de los metodos para que sea más descriptiva
     vector<vector<string>> leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies);
     vector<vector<string>> leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies);
-    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies, int colmunaCodigoSnies);
-    bool crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas);
-    bool crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas);
-    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir);
+    vector<vector<string>> leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies);
+    bool crearArchivo(string &, map<int, ProgramaAcademico*>&, vector<string>) override;
+    bool crearArchivoBuscados(string &, list<ProgramaAcademico*>&, vector<string>) override;
+    bool crearArchivoExtra(string &, vector<vector<string>>) override;
+    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
+    int conseguirCantColumnas(map<string, int>);
+    string quitarEspacioYAgregarMayus(string cadena);
 };
 
 #endif
