@@ -33,6 +33,7 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
 // Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
 // Estructuras de control anidadas profundamente.
 vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
+// Esta función retorna matriz con todos los valores encontrados en el archivo
 {
     // Estructura: La estructura es confusa.
     // Mantenimiento: Se pueden mejorar los nombres de las variables.
@@ -134,7 +135,9 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
 
 // Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
 // Parece hacer lo mismo que el metodo leerArchivoPrimera
+
 vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
+// Esta función retorna matriz con valores del consolidado
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
@@ -233,6 +236,7 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
 }
 
 vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies)
+// Esta función retorna únicamente el valor de la última columna de cada archivo
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
@@ -304,8 +308,6 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
                     streamFila = stringstream(fila);
                     columnaArchivo = 0;
                     columnaVector = 0;
-
-                    // MIRAR ULTIMA COLUMNA QUE ESTA VACIA. HACER UNA FORMA DE QUE LLEGUE HASTA LA ULTIMA COLUMNA Y YA
 
                     while (getline(streamFila, dato, ';') && columnaArchivo < POS_ULTIMA_COLUMNA)
                     {

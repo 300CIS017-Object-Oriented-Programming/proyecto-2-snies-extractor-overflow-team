@@ -29,3 +29,14 @@
 1949	2221	7510178318970299	SNIES_extractor_V2.exe	a807ba14c2262554
 19	924	7510193567280935	CMakeFiles/SNIES_extractor_V2.dir/src/GestorCsv.cpp.obj	ebde5a7e959bf91a
 924	1124	7510193576338125	SNIES_extractor_V2.exe	a807ba14c2262554
+26	475	7510212881006155	CMakeFiles/SNIES_extractor_V2.dir/src/main.cpp.obj	89669990f3be3091
+14	551	7510212880886126	CMakeFiles/SNIES_extractor_V2.dir/src/ProgramaAcademico.cpp.obj	ad742ba3ed27de44
+23	683	7510212880976146	CMakeFiles/SNIES_extractor_V2.dir/src/View.cpp.obj	4e8a6452f9ae5d3d
+21	987	7510212880956128	CMakeFiles/SNIES_extractor_V2.dir/src/SNIESController.cpp.obj	a3cf667b45d6be5d
+17	989	7510212880916158	CMakeFiles/SNIES_extractor_V2.dir/src/GestorCsv.cpp.obj	ebde5a7e959bf91a
+989	1188	7510212890633196	SNIES_extractor_V2.exe	a807ba14c2262554
+8	872	7510217350054259	CMakeFiles/SNIES_extractor_V2.dir/src/SNIESController.cpp.obj	a3cf667b45d6be5d
+872	1086	7510217358687021	SNIES_extractor_V2.exe	a807ba14c2262554
+18	1005	7510224226044397	CMakeFiles/SNIES_extractor_V2.dir/src/SNIESController.cpp.obj	a3cf667b45d6be5d
+14	1020	7510224226004359	CMakeFiles/SNIES_extractor_V2.dir/src/GestorCsv.cpp.obj	ebde5a7e959bf91a
+1020	1416	7510224236057395	SNIES_extractor_V2.exe	a807ba14c2262554

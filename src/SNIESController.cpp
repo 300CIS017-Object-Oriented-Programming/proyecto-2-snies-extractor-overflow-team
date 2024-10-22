@@ -28,12 +28,21 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
 {
     vector<int> codigosSnies;
     vector<vector<string>> programasAcademicosVector;
-    int posicion;
-    // cout << "antes leer programas csv" << endl;
+
+
     codigosSnies = gestorCsvObj.leerProgramasCsv(rutaProgramasCSV);
-    // cout << "despues leer programas csv" << endl;
+    /*
+    for (int i = 1; i < codigosSnies.size(); i += 4)
+    {
+        ProgramaAcademico* programaAcademico = new ProgramaAcademico();
+        programasAcademicos[codigosSnies[i]] = programaAcademico;
+    }
+    // TODO: PLAN: Modificar las funciones de leer archivos para que reciban como parámetro el mapa de programas académicos y puedan settear los consolidados conforme los encuentren.
+    // TODO: Opción 1: Hacer que SNIESController maneje toda la lógica mientras usa herramientas del GestorCsv.
+    // TODO: Opción 2: Modificar las funciones de GestorCsv para que edite los mapas. -> No es muy GRASP.
+    */
     programasAcademicosVector = gestorCsvObj.leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
-    // cout << "despues leer archivos Primera" << endl;
+
     etiquetasColumnas = programasAcademicosVector[0];
 
     for (int i = 1; i < programasAcademicosVector.size(); i += 4)
