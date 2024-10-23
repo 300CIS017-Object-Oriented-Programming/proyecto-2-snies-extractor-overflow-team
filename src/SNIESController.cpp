@@ -2,10 +2,24 @@
 
  using namespace std;
 
+SNIESController::SNIESController()
+{
+    gestorCsvObj = new GestorCsv();
+    rutaProgramasCSV = "C:/SNIES_EXTRACTOR/inputs/programas.csv";
+    rutaAdmitidos = "C:/SNIES_EXTRACTOR/inputs/admitidos";
+    rutaGraduados = "C:/SNIES_EXTRACTOR/inputs/graduados";
+    rutaInscritos = "C:/SNIES_EXTRACTOR/inputs/inscritos";
+    rutaMatriculados = "C:/SNIES_EXTRACTOR/inputs/matriculados";
+    rutaMatriculadosPrimerSemestre = "C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre";
+    rutaOutput = "C:/SNIES_EXTRACTOR/outputs/";
+}
+
+
 SNIESController::SNIESController(string &nuevaRutaProgramasCSV, string &nuevaRutaAdmitidos, string &nuevaRutaGraduados, string &nuevaRutaInscritos, string &nuevaRutaMatriculadosc, string &nuevaRutaMatriculadosPrimerSemestre, string &nuevaRutaOutput)
 {
     // FIXME quitar los parámetros de las rutas de los parametros del constructor, usar el archivo de settings.h para poner las constantes
     gestorCsvObj = new GestorCsv();
+
     rutaProgramasCSV = nuevaRutaProgramasCSV;
     rutaAdmitidos = nuevaRutaAdmitidos;
     rutaGraduados = nuevaRutaGraduados;

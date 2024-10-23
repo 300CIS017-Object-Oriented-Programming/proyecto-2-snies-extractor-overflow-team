@@ -27,7 +27,7 @@ private:
     string rutaOutput;
 
 public:
-    SNIESController() = default;
+    SNIESController();
     SNIESController(string &, string &, string &, string &, string &, string &, string &);
     ~SNIESController();
     void procesarDatosCsv(string &, string &);
