@@ -253,6 +253,18 @@ build CMakeFiles/SNIES_extractor_V2.dir/src/main.cpp.obj: CXX_COMPILER__SNIES_ex
   OBJECT_DIR = CMakeFiles\SNIES_extractor_V2.dir
   OBJECT_FILE_DIR = CMakeFiles\SNIES_extractor_V2.dir\src
 
+build CMakeFiles/SNIES_extractor_V2.dir/src/GestorTxt.cpp.obj: CXX_COMPILER__SNIES_extractor_V2_unscanned_Debug C$:/Users/esteb/GithubProjects/proyecto-2-snies-extractor-overflow-team/src/GestorTxt.cpp || cmake_object_order_depends_target_SNIES_extractor_V2
+  DEP_FILE = CMakeFiles\SNIES_extractor_V2.dir\src\GestorTxt.cpp.obj.d
+  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\SNIES_extractor_V2.dir
+  OBJECT_FILE_DIR = CMakeFiles\SNIES_extractor_V2.dir\src
+
+build CMakeFiles/SNIES_extractor_V2.dir/src/GestorJson.cpp.obj: CXX_COMPILER__SNIES_extractor_V2_unscanned_Debug C$:/Users/esteb/GithubProjects/proyecto-2-snies-extractor-overflow-team/src/GestorJson.cpp || cmake_object_order_depends_target_SNIES_extractor_V2
+  DEP_FILE = CMakeFiles\SNIES_extractor_V2.dir\src\GestorJson.cpp.obj.d
+  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\SNIES_extractor_V2.dir
+  OBJECT_FILE_DIR = CMakeFiles\SNIES_extractor_V2.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SNIES_extractor_V2
@@ -261,7 +273,7 @@ build CMakeFiles/SNIES_extractor_V2.dir/src/main.cpp.obj: CXX_COMPILER__SNIES_ex
 #############################################
 # Link the executable SNIES_extractor_V2.exe
 
-build SNIES_extractor_V2.exe: CXX_EXECUTABLE_LINKER__SNIES_extractor_V2_Debug CMakeFiles/SNIES_extractor_V2.dir/src/ProgramaAcademico.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/Consolidado.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/GestorCsv.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/SNIESController.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/View.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/main.cpp.obj
+build SNIES_extractor_V2.exe: CXX_EXECUTABLE_LINKER__SNIES_extractor_V2_Debug CMakeFiles/SNIES_extractor_V2.dir/src/ProgramaAcademico.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/Consolidado.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/GestorCsv.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/SNIESController.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/View.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/main.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/GestorTxt.cpp.obj CMakeFiles/SNIES_extractor_V2.dir/src/GestorJson.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\SNIES_extractor_V2.dir

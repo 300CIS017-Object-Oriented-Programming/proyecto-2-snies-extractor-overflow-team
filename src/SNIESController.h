@@ -14,10 +14,9 @@ using namespace std;
 
 class SNIESController
 {
-
 private:
     map<int, ProgramaAcademico *> programasAcademicos;
-    GestorCsv gestorCsvObj;
+    GestorCsv *gestorCsvObj = new GestorCsv();
     vector<string> etiquetasColumnas;
     string rutaProgramasCSV;
     string rutaAdmitidos;
@@ -28,7 +27,8 @@ private:
     string rutaOutput;
 
 public:
-    SNIESController();
+    SNIESController() = default;
+    SNIESController(string &, string &, string &, string &, string &, string &, string &);
     ~SNIESController();
     void procesarDatosCsv(string &, string &);
     void calcularDatosExtra(bool);
