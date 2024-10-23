@@ -147,6 +147,9 @@ public:
     string getMunicipioDeOfertaDelPrograma();
     void setConsolidado(Consolidado *, int);
     Consolidado *getConsolidado(int);
+    void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
+    Consolidado * getMapConsolidados(int anio, int idSexo, int semestre);
+
     ~ProgramaAcademico();
 };
 

@@ -344,6 +344,34 @@ Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado)
     return consolidados[posicionConsolidado];
 }
 
+void ProgramaAcademico::setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado)
+{
+    mapConsolidados[anio][idSexo][semestre] = consolidado;
+}
+
+Consolidado * ProgramaAcademico::getMapConsolidados(int anio, int idSexo, int semestre)
+// (Función solicitada a ChatGPT)
+// Evalúa si el consolidado existe para que no se creen entradas indeseadas cómo cuando se accede con []
+{
+    // Verificamos si existe el anio
+    auto itAnio = mapConsolidados.find(anio);
+    if (itAnio != mapConsolidados.end()) {
+        // Verificamos si existe el idSexo dentro del anio
+        auto itSexo = itAnio->second.find(idSexo);
+        if (itSexo != itAnio->second.end()) {
+            // Verificamos si existe el semestre dentro del idSexo
+            auto itSemestre = itSexo->second.find(semestre);
+            if (itSemestre != itSexo->second.end()) {
+                // Si lo anterior existe, devolvemos el Consolidado correspondiente
+                return itSemestre->second;
+            }
+        }
+    }
+    // Si no existe la combinación de claves, retornamos nullptr
+    return nullptr;
+}
+
+
 ProgramaAcademico::~ProgramaAcademico()
 {
     for (Consolidado *consolidado : consolidados)

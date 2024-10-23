@@ -35,15 +35,11 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
 vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
 // Esta función retorna matriz con todos los valores encontrados en el archivo
 {
-    // Estructura: La estructura es confusa.
-    // Mantenimiento: Se pueden mejorar los nombres de las variables.
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
 
     map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-
-    cout << "Posicion Codigo SNIES: " << POS_COD_SNIES << endl;
     int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
 
     ifstream archivoPrimero(rutaCompleta);
@@ -59,9 +55,6 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
         stringstream streamFila;
         int columna;
         vector<int>::iterator it;
-
-        // Conseguir posiciones de las columnas
-
 
         // Primera iteracion del ciclo para guardar las etiquetas
         getline(archivoPrimero, fila);
@@ -205,6 +198,10 @@ vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &a
                     }
                     columnaArchivo++;
                 }
+
+                // TODO: AQUI CREAR EL PUNTERO DE CONSOLIDADO Y AGREGARLO EN EL MAPA AL PROGRAMA ACADÉMICO QUE CORRESPONDE
+                // TODO: EDITAR EL CONSOLIDADO CON LOS VALORES DE LA FILA QUE ACABAMOS DE LEER.
+
                 matrizResultado.push_back(vectorFila);
 
                 // Leer las otras 3 filas
@@ -329,6 +326,171 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
 
     archivoSegundo.close();
 
+    return matrizResultado;
+}
+
+vector<string> GestorCsv::leerEtiquetasArchivo(ifstream &archivo, int CANT_COLUMNAS_ARCHIVO)
+{
+    string fila;
+    string dato;
+    vector<string> vectorFila;
+    stringstream streamFila;
+    int columna;
+
+    vectorFila = vector<string>(CANT_COLUMNAS_ARCHIVO);
+    streamFila = stringstream(fila);
+    columna = 0;
+    while ((getline(streamFila, dato, ';')))
+    {
+
+        vectorFila[columna] = dato;
+        columna++;
+    }
+
+    return vectorFila;
+}
+
+vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool &primeraVez, string &atributoAModificar)
+{
+    vector<vector<string>> matrizResultado;
+    string rutaCompleta = rutaBase + ano + ".csv";
+
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
+    int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
+    int POS_SEXO = posicionesColumnasMap["SEXO"];
+    int POS_ANIO = posicionesColumnasMap["AÑO"];
+    int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"];
+    int POS_ULTIMA_COLUMNA = POS_SEMESTRE + 1;
+    int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
+
+    ifstream archivo(rutaCompleta);
+
+    // FIXME: MANEJAR EL ERROR BIEN. NO SOLO IMPRIMIENDO. Y ASÍ BORRAR EL else{}
+    if (!(archivo.is_open()))
+    {
+        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
+    }
+    else
+    {
+        string fila;
+        string dato;
+        vector<string> vectorFila;
+        stringstream streamFila;
+        int columna;
+        string codSniesActual;
+        // vector<int>::iterator it;
+        size_t existeEnMapaProgsAcademicos;
+        size_t existeEnMapaConsolidados;
+
+        // Primera iteracion del ciclo para leer las etiquetas
+        getline(archivo, fila);
+
+        // Si es la primera lectura, guardamos las etiquetas y la agregamos a la matriz de resultados
+        if (primeraVez)
+        {
+            vector<string> vectorConEtiquetas = leerEtiquetasArchivo(archivo, TAMANIO_ARCHIVO);
+            matrizResultado.push_back(vectorConEtiquetas);
+        }
+        // Si no es la primera lectura, no agregamos nada a la matriz de resultados.
+
+
+        // Leer el resto del archivo
+        while (getline(archivo, fila))
+        {
+            streamFila = stringstream(fila);
+            columna = 0;
+            while ((getline(streamFila, dato, ';')) && (columna <= POS_COD_SNIES))
+            {
+                vectorFila[columna] = dato;
+                columna++;
+            }
+
+            codSniesActual = vectorFila[POS_COD_SNIES];
+            // Verificamos que la fila no sea una fila de error
+            if (codSniesActual != "Sin programa especifico")
+            {
+                existeEnMapaProgsAcademicos = mapaProgramasAcademicos.count(stoi(codSniesActual));
+            }
+            else
+            {
+                existeEnMapaProgsAcademicos = 0;
+            }
+
+            // Verificar si hace parte de los programas que me interesan
+            if (existeEnMapaProgsAcademicos) // Caso donde si está dentro de los programas que me interesan
+            {
+                // Termino de leer y guardar primera fila
+                vectorFila[columna] = dato; // Guardamos el dato que habiamos geteado justo antes de hacer la verificacion
+                columna++;
+                while ((getline(streamFila, dato, ';')))
+                {
+                    vectorFila[columna] = dato;
+                    columna++;
+                }
+
+                int COD_SNIES = stoi(vectorFila[POS_COD_SNIES]);
+                int ID_SEXO = stoi(vectorFila[POS_ID_SEXO]);
+                string SEXO = vectorFila[POS_SEXO];
+                int ANIO = stoi(vectorFila[POS_ANIO]);
+                int SEMESTRE = stoi(vectorFila[POS_SEMESTRE]);
+                int ULTIMA_COLUMNA = stoi(vectorFila[POS_ULTIMA_COLUMNA]);
+
+                // Accedemos al ProgramaAcademico * desde el mapa
+                ProgramaAcademico * progAcademicoActual = mapaProgramasAcademicos[COD_SNIES];
+                // FIXME: CAMBIAR EL NOMBRE DE LA FUNCION getMapConsolidado POR getConsolidadoDeMapa cuando acabe de hacer toda la transición de vector a mapa
+                Consolidado * consolidadoActual = progAcademicoActual->getMapConsolidados(ANIO, ID_SEXO, SEMESTRE);
+
+                // En caso de que el consolidado no exista, se crea uno y se settea en el mapa
+                if (consolidadoActual == nullptr)
+                {
+                    consolidadoActual = new Consolidado(ID_SEXO, SEXO, ANIO, SEMESTRE);
+                    // Setteamos el consolidado en el mapa existente
+                    progAcademicoActual -> setMapConsolidados(ANIO, ID_SEXO, SEMESTRE, consolidadoActual);
+                }
+
+                if (atributoAModificar == "admitidos") {
+                    consolidadoActual -> setAdmitidos(ULTIMA_COLUMNA);
+                }
+                else if (atributoAModificar == "inscritos") {
+                    consolidadoActual -> setInscritos(ULTIMA_COLUMNA);
+                }
+                else if (atributoAModificar == "matriculados") {
+                    consolidadoActual -> setMatriculados(ULTIMA_COLUMNA);
+                }
+                else if (atributoAModificar == "neos") {
+                    consolidadoActual -> setMatriculadosPrimerSemestre(ULTIMA_COLUMNA);
+                }
+                else if (atributoAModificar == "graduados") {
+                    consolidadoActual -> setGraduados(ULTIMA_COLUMNA);
+                }
+
+                // TODO: AQUI CREAR EL CONSOLIDADO Y AGREGARLO A mapaProgramasAcademicos QUE LE CORRESPONDE
+                // TODO: EDITAR EL CONSOLIDADO CON LOS VALORES DE LA FILA QUE ACABAMOS DE LEER.
+                // TODO: CREAR UN MAPA Y AGREGAR LOS VALORES GUARDADOS NO A UN VECTOR SINO A UN MAPA PARA LUEGO DE AHÍ SETTEAR LA INFORMACIÓN. SE PUEDE? COMO SE SETTEARÍAN?
+
+
+                // Leo y guardo filas restantes
+                for (int j = 0; j < 3; j++)
+                {
+                    getline(archivo, fila);
+                    streamFila = stringstream(fila);
+                    columna = 0;
+                    while ((getline(streamFila, dato, ';')))
+                    {
+                        vectorFila[columna] = dato;
+                        columna++;
+                    }
+                    matrizResultado.push_back(vectorFila);
+                }
+            }
+            // Si es de los programas que no me interesan, sigo a la siguiente fila, sin guardar la fila en la matriz de resultados
+        }
+    }
+
+    archivo.close();
+
+    // FIXME: PARECE QUE NO SE NECESITA EXPORTAR NADA.
     return matrizResultado;
 }
 
@@ -588,7 +750,6 @@ int GestorCsv::conseguirCantColumnas(map<string, int> mapa) {
             maxPosicion = par.second;
         }
     }
-    cout << "La posicion mas grande es: " << maxPosicion << endl;
 
     return maxPosicion;
 }
@@ -599,6 +760,7 @@ string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
 
     return cadena;
 }
+
 
 /*
     CÓDIGO DE LA INSTITUCIÓN

@@ -41,6 +41,10 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     // TODO: Opción 1: Hacer que SNIESController maneje toda la lógica mientras usa herramientas del GestorCsv.
     // TODO: Opción 2: Modificar las funciones de GestorCsv para que edite los mapas. -> No es muy GRASP.
     */
+
+    // TODO: REVISAR LAS SALIDAS DE LAS MATRICES DE CADA FUNCIÓN DE LEER ARCHIVO PARA SABER QUÉ ESTÁ SALIENDO DE CADA UNA.
+    // TODO: PORQUE NO SÉ PARA QUÉ UNA SEGUNDA FUNCIÓN. NO SE PUEDE HACER CON LA MISMA TERCERA?
+
     programasAcademicosVector = gestorCsvObj.leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
 
     etiquetasColumnas = programasAcademicosVector[0];
