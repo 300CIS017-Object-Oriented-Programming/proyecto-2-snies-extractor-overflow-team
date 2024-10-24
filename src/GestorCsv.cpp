@@ -12,8 +12,7 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     {
         string linea;
         string dato;
-        // Mantenimiento (Revisión): Se puede mejorar la lectura de archivos con getline y
-        // No debería saltarse la primera linea para así determinar qué está leyendo.
+
         // Saltarse la primera linea
         getline(archivoProgramasCsv, linea);
         // Leer los programas
@@ -28,304 +27,6 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     }
     archivoProgramasCsv.close();
     return codigosSniesRetorno;
-}
-
-// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
-// Estructuras de control anidadas profundamente.
-vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &ano, vector<int> &codigosSnies)
-// Esta función retorna matriz con todos los valores encontrados en el archivo
-{
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-
-    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
-    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-    int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
-
-    ifstream archivoPrimero(rutaCompleta);
-    if (!(archivoPrimero.is_open()))
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-    }
-    else
-    {
-        string fila;
-        string dato;
-        vector<string> vectorFila;
-        stringstream streamFila;
-        int columna;
-        vector<int>::iterator it;
-
-        // Primera iteracion del ciclo para guardar las etiquetas
-        getline(archivoPrimero, fila);
-        vectorFila = vector<string>(TAMANIO_ARCHIVO);
-        streamFila = stringstream(fila);
-        columna = 0;
-        while ((getline(streamFila, dato, ';')))
-        {
-
-            vectorFila[columna] = dato;
-            columna++;
-        }
-        matrizResultado.push_back(vectorFila);
-
-        // Leer el resto del archivo
-        while (getline(archivoPrimero, fila))
-        {
-            streamFila = stringstream(fila);
-            columna = 0;
-            while ((getline(streamFila, dato, ';')) && (columna <= POS_COD_SNIES))
-            {
-                vectorFila[columna] = dato;
-                columna++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[POS_COD_SNIES] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[POS_COD_SNIES]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso donde si estaba dentro de los programas que me interesan
-            {
-                // Termino de leer y guardar primera fila
-                vectorFila[columna] = dato; // Guardamos el dato que habiamos geteado justo antes de hacer la verificacion
-                columna++;
-                while ((getline(streamFila, dato, ';')))
-                {
-                    vectorFila[columna] = dato;
-                    columna++;
-                }
-                matrizResultado.push_back(vectorFila);
-
-                // Leo y guardo filas restantes
-                for (int j = 0; j < 3; j++)
-                {
-                    getline(archivoPrimero, fila);
-                    streamFila = stringstream(fila);
-                    columna = 0;
-                    while ((getline(streamFila, dato, ';')))
-                    {
-                        vectorFila[columna] = dato;
-                        columna++;
-                    }
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-            // Si es de los programas que no me interesan, sigo a la siguiente fila, sin guardar la fila en la matriz de resultados
-        }
-    }
-
-    archivoPrimero.close();
-
-    return matrizResultado;
-}
-
-// Complejidad: Este metodo tiene una alta complejidad ciclomática y computacional, reducir en metodos más pequeños
-// Parece hacer lo mismo que el metodo leerArchivoPrimera
-
-vector<vector<string>> GestorCsv::leerArchivoSegunda(string &rutaBase, string &ano, vector<int> &codigosSnies)
-// Esta función retorna matriz con valores del consolidado
-{
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-
-    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
-    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
-    int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
-
-    ifstream archivoSegundo(rutaCompleta);
-    if (!(archivoSegundo.is_open()))
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-    }
-    else
-    {
-        string fila;
-        string dato;
-        vector<string> vectorFila(6);
-        stringstream streamFila;
-        int columnaArchivo;
-        int columnaVector;
-        vector<int>::iterator it;
-
-        // Nos saltamos las etiquetas para no interferir en el bucle
-        getline(archivoSegundo, fila);
-
-        // Leemos las filas
-        while (getline(archivoSegundo, fila))
-        {
-            streamFila = stringstream(fila);
-            columnaArchivo = 0;
-            columnaVector = 0;
-            while (getline(streamFila, dato, ';') && columnaArchivo < POS_COD_SNIES + 1)
-            {
-                if (columnaArchivo == POS_COD_SNIES)
-                {
-                    vectorFila[columnaVector] = dato;
-                    columnaVector++;
-                }
-                columnaArchivo++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[0] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[0]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso cuando SI es parte de los que me interesan
-            {
-                // Termino de leer y guardar primera fila
-                columnaArchivo++; // Esto se debe a la iteracion en que hacemos getline sin subirle a la columaArchivo porque nos salimos del bucle
-                while (getline(streamFila, dato, ';'))
-                {
-                    if (columnaArchivo >= POS_ID_SEXO)
-                    {
-                        vectorFila[columnaVector] = dato;
-                        columnaVector++;
-                    }
-                    columnaArchivo++;
-                }
-
-                // TODO: AQUI CREAR EL PUNTERO DE CONSOLIDADO Y AGREGARLO EN EL MAPA AL PROGRAMA ACADÉMICO QUE CORRESPONDE
-                // TODO: EDITAR EL CONSOLIDADO CON LOS VALORES DE LA FILA QUE ACABAMOS DE LEER.
-
-                matrizResultado.push_back(vectorFila);
-
-                // Leer las otras 3 filas
-                for (int i = 0; i < 3; i++)
-                {
-                    getline(archivoSegundo, fila);
-                    streamFila = stringstream(fila);
-                    columnaArchivo = 0;
-                    columnaVector = 0;
-                    while (getline(streamFila, dato, ';'))
-                    {
-                        if ((columnaArchivo >= POS_ID_SEXO) || (columnaArchivo == POS_COD_SNIES))
-                        {
-                            vectorFila[columnaVector] = dato;
-                            columnaVector++;
-                        }
-                        columnaArchivo++;
-                    }
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-            // Cuando no me interesa no hago nada
-        }
-    }
-
-    archivoSegundo.close();
-
-    return matrizResultado;
-}
-
-vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vector<int> &codigosSnies)
-// Esta función retorna únicamente el valor de la última columna de cada archivo
-{
-    vector<vector<string>> matrizResultado;
-    string rutaCompleta = rutaBase + ano + ".csv";
-
-    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
-    int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
-    // FIXME: Buscar una forma para que la posición de la última columna no tenga que estar obligatoriamente a la derecha de semestre.
-    int POS_ULTIMA_COLUMNA = posicionesColumnasMap["SEMESTRE"] + 1;
-
-    ifstream archivoSegundo(rutaCompleta);
-    if (!(archivoSegundo.is_open()))
-    {
-        cout << "Archivo " << rutaCompleta << " no se pudo abrir correctamente" << endl;
-    }
-    else
-    {
-        string fila;
-        string dato;
-        vector<string> vectorFila(2);
-        stringstream streamFila;
-        int columnaArchivo;
-        int columnaVector;
-        vector<int>::iterator it;
-
-        // Nos saltamos las etiquetas para no interferir en el bucle
-        getline(archivoSegundo, fila);
-
-        // Leemos las filas
-        while (getline(archivoSegundo, fila))
-        {
-            streamFila = stringstream(fila);
-            columnaArchivo = 0;
-            columnaVector = 0;
-            while ((getline(streamFila, dato, ';')) && (columnaArchivo < (POS_COD_SNIES + 1)))
-            {
-                if (columnaArchivo == POS_COD_SNIES)
-                {
-                    vectorFila[columnaVector] = dato;
-                    columnaVector++;
-                }
-                columnaArchivo++;
-            }
-
-            // Verificamos que la fila no sea una fila de error
-            if (vectorFila[0] != "Sin programa especifico")
-            {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[0]));
-            }
-            else
-            {
-                it = codigosSnies.end();
-            }
-
-            // Verificar si hace parte de los programas que me interesan
-            if (it != codigosSnies.end()) // Caso cuando SI es parte de los que me interesan
-            {
-                // Terminar de leer primera fila
-                while (getline(streamFila, dato, ';'))
-                {
-                    vectorFila[columnaVector] = dato;
-                }
-
-                matrizResultado.push_back(vectorFila);
-
-                // Leer las otras 3 filas
-                for (int i = 0; i < 3; i++)
-                {
-                    getline(archivoSegundo, fila);
-                    streamFila = stringstream(fila);
-                    columnaArchivo = 0;
-                    columnaVector = 0;
-
-                    while (getline(streamFila, dato, ';') && columnaArchivo < POS_ULTIMA_COLUMNA)
-                    {
-                        if (columnaArchivo == POS_COD_SNIES)
-                        {
-                            vectorFila[columnaVector] = dato;
-                            columnaVector++;
-                        }
-                        columnaArchivo++;
-                    }
-                    vectorFila[columnaVector] = dato;
-                    matrizResultado.push_back(vectorFila);
-                }
-            }
-
-        }
-    }
-
-    archivoSegundo.close();
-
-    return matrizResultado;
 }
 
 void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar)
@@ -428,7 +129,7 @@ void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, Program
                 // Accedemos al ProgramaAcademico * desde el mapa
                 progAcademicoActual = mapaProgramasAcademicos[COD_SNIES];
                 // Setteamos el programa académico
-                progAcademicoActual->setTodoElProgramaAcademico(vectorFila);
+                progAcademicoActual->setTodoElProgramaAcademico(vectorFila, posicionesColumnasMap);
 
                 Consolidado * consolidadoActual = progAcademicoActual->getConsolidadoDeMapa(ANIO, ID_SEXO, SEMESTRE);
 
@@ -456,18 +157,14 @@ void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, Program
                     consolidadoActual -> setGraduados(ULTIMA_COLUMNA);
                 }
             }
-            // Si es de los programas que no me interesan, sigo a la siguiente fila, sin guardar la fila en la matriz de resultados
         }
     }
-
     archivo.close();
-
 }
 
-bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
 {
     // Este bool nos ayudará a saber si se creo exitosamente el archivo
-    bool estadoCreacion = false;
     string rutaCompleta = ruta + "resultados.csv";
     ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
@@ -477,75 +174,124 @@ bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
         {
             archivoResultados << etiquetasColumnas[i] << ";";
         }
-        archivoResultados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
 
-        map<int, ProgramaAcademico *>::iterator it;
-        // Leemos todos los programas del mapa para imprimirlos en el archivo
-        for (it = mapadeProgramasAcademicos.begin(); it != mapadeProgramasAcademicos.end(); it++)
+        archivoResultados << "\xEF\xBB\xBF";    // Permite escribir los caracteres con tildes correctamente
+        archivoResultados << "CÓDIGO DE LA INSTITUCIÓN;"
+                             "IES_PADRE;"
+                             "INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES);"
+                             "PRINCIPAL O SECCIONAL;"
+                             "ID SECTOR IES;"
+                             "SECTOR IES;"
+                             "ID CARACTER;"
+                             "CARACTER IES;"
+                             "CÓDIGO DEL DEPARTAMENTO (IES);"
+                             "DEPARTAMENTO DE DOMICILIO DE LA IES;"
+                             "CÓDIGO DEL MUNICIPIO IES;"
+                             "MUNICIPIO DE DOMICILIO DE LA IES;"
+                             "CÓDIGO SNIES DEL PROGRAMA;"
+                             "PROGRAMA ACADÉMICO;"
+                             "ID NIVEL ACADÉMICO;"
+                             "NIVEL ACADÉMICO;"
+                             "ID NIVEL DE FORMACIÓN;"
+                             "NIVEL DE FORMACIÓN;"
+                             "ID METODOLOGÍA;"
+                             "METODOLOGÍA;"
+                             "ID ÁREA;"
+                             "ÁREA DE CONOCIMIENTO;"
+                             "ID NÚCLEO;"
+                             "NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC);"
+                             "ID CINE CAMPO AMPLIO;"
+                             "DESC CINE CAMPO AMPLIO;"
+                             "ID CINE CAMPO ESPECIFICO;"
+                             "DESC CINE CAMPO ESPECIFICO;"
+                             "ID CINE CODIGO DETALLADO;"
+                             "DESC CINE CODIGO DETALLADO;"
+                             "CÓDIGO DEL DEPARTAMENTO (PROGRAMA);"
+                             "DEPARTAMENTO DE OFERTA DEL PROGRAMA;"
+                             "CÓDIGO DEL MUNICIPIO (PROGRAMA);"
+                             "MUNICIPIO DE OFERTA DEL PROGRAMA;"
+                             "ID SEXO;"
+                             "SEXO;"
+                             "AÑO;"
+                             "SEMESTRE;"
+                             "ADMITIDOS;"
+                             "GRADUADOS;"
+                             "INSCRITOS;"
+                             "MATRICULADOS;"
+                             "NEOS" << endl;
+
+        for (const auto &entryPrograma : mapadeProgramasAcademicos)
         {
-            // Imprimimos cada uno de los 8 consolidados por programa
-            for (int i = 0; i < 8; i++)
+            ProgramaAcademico * programaActual = entryPrograma.second;
+            for (const auto &entryAno : programaActual->getMapaDeConsolidados())
             {
-                // Imprimimos toda la información base del programa academico
-                archivoResultados << (it->second)->getCodigoDeLaInstitucion() << ";";
-                archivoResultados << (it->second)->getIesPadre() << ";";
-                archivoResultados << (it->second)->getInstitucionDeEducacionSuperiorIes() << ";";
-                archivoResultados << (it->second)->getPrincipalOSeccional() << ";";
-                archivoResultados << (it->second)->getIdSectorIes() << ";";
-                archivoResultados << (it->second)->getSectorIes() << ";";
-                archivoResultados << (it->second)->getIdCaracter() << ";";
-                archivoResultados << (it->second)->getCaracterIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelDepartamentoIes() << ";";
-                archivoResultados << (it->second)->getDepartamentoDeDomicilioDeLaIes() << ";";
-                archivoResultados << (it->second)->getCodigoDelMunicipioIes() << ";";
-                archivoResultados << (it->second)->getMunicipioDeDomicilioDeLaIes() << ";";
-                archivoResultados << (it->second)->getCodigoSniesDelPrograma() << ";";
-                archivoResultados << (it->second)->getProgramaAcademico() << ";";
-                archivoResultados << (it->second)->getIdNivelAcademico() << ";";
-                archivoResultados << (it->second)->getNivelAcademico() << ";";
-                archivoResultados << (it->second)->getIdNivelDeFormacion() << ";";
-                archivoResultados << (it->second)->getNivelDeFormacion() << ";";
-                archivoResultados << (it->second)->getIdMetodologia() << ";";
-                archivoResultados << (it->second)->getMetodologia() << ";";
-                archivoResultados << (it->second)->getIdArea() << ";";
-                archivoResultados << (it->second)->getAreaDeConocimiento() << ";";
-                archivoResultados << (it->second)->getIdNucleo() << ";";
-                archivoResultados << (it->second)->getNucleoBasicoDelConocimientoNbc() << ";";
-                archivoResultados << (it->second)->getIdCineCampoAmplio() << ";";
-                archivoResultados << (it->second)->getDescCineCampoAmplio() << ";";
-                archivoResultados << (it->second)->getIdCineCampoEspecifico() << ";";
-                archivoResultados << (it->second)->getDescCineCampoEspecifico() << ";";
-                archivoResultados << (it->second)->getIdCineCodigoDetallado() << ";";
-                archivoResultados << (it->second)->getDescCineCodigoDetallado() << ";";
-                archivoResultados << (it->second)->getCodigoDelDepartamentoPrograma() << ";";
-                archivoResultados << (it->second)->getDepartamentoDeOfertaDelPrograma() << ";";
-                archivoResultados << (it->second)->getCodigoDelMunicipioPrograma() << ";";
-                archivoResultados << (it->second)->getMunicipioDeOfertaDelPrograma() << ";";
+                int ano = entryAno.first;
+                for (const auto &entrySexo : entryAno.second)
+                {
+                    int idSexo = entrySexo.first;
+                    for (const auto &entrySemestre : entrySexo.second)
+                    {
+                        int semestre = entrySemestre.first;
+                        Consolidado * consolidadoActual = entrySemestre.second;
+                        // Imprimimos toda la información base del programa academico
+                        archivoResultados << programaActual->getCodigoDeLaInstitucion() << ";";
+                        archivoResultados << programaActual->getIesPadre() << ";";
+                        archivoResultados << programaActual->getInstitucionDeEducacionSuperiorIes() << ";";
+                        archivoResultados << programaActual->getPrincipalOSeccional() << ";";
+                        archivoResultados << programaActual->getIdSectorIes() << ";";
+                        archivoResultados << programaActual->getSectorIes() << ";";
+                        archivoResultados << programaActual->getIdCaracter() << ";";
+                        archivoResultados << programaActual->getCaracterIes() << ";";
+                        archivoResultados << programaActual->getCodigoDelDepartamentoIes() << ";";
+                        archivoResultados << programaActual->getDepartamentoDeDomicilioDeLaIes() << ";";
+                        archivoResultados << programaActual->getCodigoDelMunicipioIes() << ";";
+                        archivoResultados << programaActual->getMunicipioDeDomicilioDeLaIes() << ";";
+                        archivoResultados << programaActual->getCodigoSniesDelPrograma() << ";";
+                        archivoResultados << programaActual->getProgramaAcademico() << ";";
+                        archivoResultados << programaActual->getIdNivelAcademico() << ";";
+                        archivoResultados << programaActual->getNivelAcademico() << ";";
+                        archivoResultados << programaActual->getIdNivelDeFormacion() << ";";
+                        archivoResultados << programaActual->getNivelDeFormacion() << ";";
+                        archivoResultados << programaActual->getIdMetodologia() << ";";
+                        archivoResultados << programaActual->getMetodologia() << ";";
+                        archivoResultados << programaActual->getIdArea() << ";";
+                        archivoResultados << programaActual->getAreaDeConocimiento() << ";";
+                        archivoResultados << programaActual->getIdNucleo() << ";";
+                        archivoResultados << programaActual->getNucleoBasicoDelConocimientoNbc() << ";";
+                        archivoResultados << programaActual->getIdCineCampoAmplio() << ";";
+                        archivoResultados << programaActual->getDescCineCampoAmplio() << ";";
+                        archivoResultados << programaActual->getIdCineCampoEspecifico() << ";";
+                        archivoResultados << programaActual->getDescCineCampoEspecifico() << ";";
+                        archivoResultados << programaActual->getIdCineCodigoDetallado() << ";";
+                        archivoResultados << programaActual->getDescCineCodigoDetallado() << ";";
+                        archivoResultados << programaActual->getCodigoDelDepartamentoPrograma() << ";";
+                        archivoResultados << programaActual->getDepartamentoDeOfertaDelPrograma() << ";";
+                        archivoResultados << programaActual->getCodigoDelMunicipioPrograma() << ";";
+                        archivoResultados << programaActual->getMunicipioDeOfertaDelPrograma() << ";";
 
-                // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
-                Consolidado *consolidadoActual = (it->second)->getConsolidado(i);
-                archivoResultados << consolidadoActual->getIdSexo() << ";";
-                archivoResultados << consolidadoActual->getSexo() << ";";
-                archivoResultados << consolidadoActual->getAno() << ";";
-                archivoResultados << consolidadoActual->getSemestre() << ";";
-                archivoResultados << consolidadoActual->getAdmitidos() << ";";
-                archivoResultados << consolidadoActual->getGraduados() << ";";
-                archivoResultados << consolidadoActual->getInscritos() << ";";
-                archivoResultados << consolidadoActual->getMatriculados() << ";";
-                archivoResultados << consolidadoActual->getMatriculadosPrimerSemestre();
-                // Saltamos de linea para la siguiente fila
-                archivoResultados << endl;
+                        // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
+                        archivoResultados << consolidadoActual->getIdSexo() << ";";
+                        archivoResultados << consolidadoActual->getSexo() << ";";
+                        archivoResultados << consolidadoActual->getAno() << ";";
+                        archivoResultados << consolidadoActual->getSemestre() << ";";
+                        archivoResultados << consolidadoActual->getAdmitidos() << ";";
+                        archivoResultados << consolidadoActual->getGraduados() << ";";
+                        archivoResultados << consolidadoActual->getInscritos() << ";";
+                        archivoResultados << consolidadoActual->getMatriculados() << ";";
+                        archivoResultados << consolidadoActual->getMatriculadosPrimerSemestre();
+                        // Saltamos de linea para la siguiente fila
+                        archivoResultados << endl;
+                    }
+
+                }
             }
         }
 
-        // Cambiamos el valor del booleano si logramos llegar hasta este punto
-        estadoCreacion = true;
         // Imprimimos ruta donde quedo el archivo
         cout << "Archivo Creado en: " << rutaCompleta << endl;
     }
 
     archivoResultados.close();
-    return estadoCreacion;
 }
 
 bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
@@ -721,47 +467,3 @@ string GestorCsv::quitarEspacioYAgregarMayus(string cadena) {
 
     return cadena;
 }
-
-
-/*
-    CÓDIGO DE LA INSTITUCIÓN
-    CÓDIGO DE LA INSTITUCIÓN
-    IES_PADRE
-    INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
-    PRINCIPAL O SECCIONAL
-    ID SECTOR IES
-    SECTOR IES
-    ID CARACTER
-    CARACTER IES
-    CÓDIGO DEL DEPARTAMENTO (IES)
-    DEPARTAMENTO DE DOMICILIO DE LA IES
-    CÓDIGO DEL MUNICIPIO IES
-    MUNICIPIO DE DOMICILIO DE LA IES
-    CÓDIGO SNIES DEL PROGRAMA
-    PROGRAMA ACADÉMICO
-    ID NIVEL ACADÉMICO
-    NIVEL ACADÉMICO
-    ID NIVEL DE FORMACIÓN
-    NIVEL DE FORMACIÓN
-    ID METODOLOGÍA
-    METODOLOGÍA
-    ID ÁREA
-    ÁREA DE CONOCIMIENTO
-    ID NÚCLEO
-    NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
-    ID CINE CAMPO AMPLIO
-    DESC CINE CAMPO AMPLIO
-    ID CINE CAMPO ESPECIFICO
-    DESC CINE CAMPO ESPECIFICO
-    ID CINE CODIGO DETALLADO
-    DESC CINE CODIGO DETALLADO
-    CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
-    DEPARTAMENTO DE OFERTA DEL PROGRAMA
-    CÓDIGO DEL MUNICIPIO (PROGRAMA)
-    MUNICIPIO DE OFERTA DEL PROGRAMA
-    ID SEXO
-    SEXO
-    AÑO
-    SEMESTRE
-    ADMITIDOS
-     */

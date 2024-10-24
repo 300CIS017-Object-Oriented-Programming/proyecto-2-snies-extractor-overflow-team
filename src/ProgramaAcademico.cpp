@@ -370,43 +370,48 @@ Consolidado * ProgramaAcademico::getConsolidadoDeMapa(int anio, int idSexo, int 
     // Si no existe la combinación de claves, retornamos nullptr
     return nullptr;
 }
+
+map<int, map<int, map<int, Consolidado *> > > ProgramaAcademico::getMapaDeConsolidados() {
+    return mapConsolidados;
+}
+
 // TODO: HACER FUNCIÓN PARA SETTEAR TODO EL PROGRAMA ACADÉMICO.
-void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo)
+void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones)
 {
-    codigoDeLaInstitucion = stoi(vectorConInfo[0]);         // CÓDIGO DE LA INSTITUCIÓN
-    iesPadre = stoi(vectorConInfo[1]);                      // IES_PADRE
-    institucionDeEducacionSuperiorIes = vectorConInfo[2];   // INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
-    principalOSeccional = vectorConInfo[3];                 // PRINCIPAL O SECCIONAL
-    idSectorIes = stoi(vectorConInfo[4]);                   // ID SECTOR IES
-    sectorIes = vectorConInfo[5];                           // SECTOR IES
-    idCaracter = stoi(vectorConInfo[6]);                    // ID CARÁCTER
-    caracterIes = vectorConInfo[7];                         // CARACTER IES
-    codigoDelDepartamentoIes = stoi(vectorConInfo[8]);      // CÓDIGO DEL DEPARTAMENTO (IES)
-    departamentoDeDomicilioDeLaIes = vectorConInfo[9];      // DEPARTAMENTO DE DOMICILIO DE LA IES
-    codigoDelMunicipioIes = stoi(vectorConInfo[10]);        // CÓDIGO DEL MUNICIPIO IES
-    municipioDeDomicilioDeLaIes = vectorConInfo[11];        // MUNICIPIO DE DOMICILIO DE LA IES
-    codigoSniesDelPrograma = stoi(vectorConInfo[12]);       // CÓDIGO SNIES DEL PROGRAMA
-    a = vectorConInfo[13];                                  // PROGRAMA ACADÉMICO
-    idNivelAcademico = stoi(vectorConInfo[14]);             // ID NIVEL ACADÉMICO
-    nivelAcademico = vectorConInfo[15];                     // NIVEL ACADÉMICO
-    idNivelDeFormacion = stoi(vectorConInfo[16]);             // ID NIVEL DE FORMACIÓN
-    nivelDeFormacion = vectorConInfo[17];                   // NIVEL DE FORMACIÓN
-    idMetodologia = stoi(vectorConInfo[18]);                // ID METODOLOGÍA
-    metodologia = vectorConInfo[19];                        // METODOLOGÍA
-    idArea = stoi(vectorConInfo[20]);                       // ID ÁREA
-    areaDeConocimiento = vectorConInfo[21];                 // ÁREA DE CONOCIMIENTO
-    idNucleo = stoi(vectorConInfo[22]);                     // ID NÚCLEO
-    nucleoBasicoDelConocimientoNbc = vectorConInfo[23];     // NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
-    idCineCampoAmplio = stoi(vectorConInfo[24]);            // ID CINE CAMPO AMPLIO
-    descCineCampoAmplio = vectorConInfo[25];                // DESC CINE CAMPO AMPLIO
-    idCineCampoEspecifico = stoi(vectorConInfo[26]);        // ID CINE CAMPO ESPECÍFICO
-    descCineCampoEspecifico = vectorConInfo[27];            // DESC CINE CAMPO ESPECÍFICO
-    idCineCodigoDetallado = stoi(vectorConInfo[28]);        // ID CINE CÓDIGO DETALLADO
-    descCineCodigoDetallado = vectorConInfo[29];            // DESC CINE CÓDIGO DETALLADO
-    codigoDelDepartamentoPrograma = stoi(vectorConInfo[30]);    // CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
-    departamentoDeOfertaDelPrograma = vectorConInfo[31];    // DEPARTAMENTO DE OFERTA DEL PROGRAMA
-    codigoDelMunicipioPrograma = stoi(vectorConInfo[32]);   // CÓDIGO DEL MUNICIPIO (PROGRAMA)
-    municipioDeOfertaDelPrograma = vectorConInfo[33];       // MUNICIPIO DE OFERTA DEL PROGRAMA
+    codigoDeLaInstitucion = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DE_LA_INSTITUCIÓN" ]]);         // CÓDIGO DE LA INSTITUCIÓN
+    iesPadre = stoi(vectorConInfo[mapPosiciones["IES_PADRE"]]);                      // IES_PADRE
+    institucionDeEducacionSuperiorIes = vectorConInfo[mapPosiciones["INSTITUCIÓN_DE_EDUCACIÓN_SUPERIOR_(IES)"]];   // INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
+    principalOSeccional = vectorConInfo[mapPosiciones["PRINCIPAL_O_SECCIONAL"]];                 // PRINCIPAL O SECCIONAL
+    idSectorIes = stoi(vectorConInfo[mapPosiciones["ID_SECTOR_IES"]]);                   // ID SECTOR IES
+    sectorIes = vectorConInfo[mapPosiciones["SECTOR_IES"]];                           // SECTOR IES
+    idCaracter = stoi(vectorConInfo[mapPosiciones["ID_CARACTER"]]);                    // ID CARÁCTER
+    caracterIes = vectorConInfo[mapPosiciones["CARACTER_IES"]];                         // CARACTER IES
+    codigoDelDepartamentoIes = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_DEPARTAMENTO_(IES)"]]);      // CÓDIGO DEL DEPARTAMENTO (IES)
+    departamentoDeDomicilioDeLaIes = vectorConInfo[mapPosiciones["DEPARTAMENTO_DE_DOMICILIO_DE_LA_IES"]];      // DEPARTAMENTO DE DOMICILIO DE LA IES
+    codigoDelMunicipioIes = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_MUNICIPIO_(IES)"]]);        // CÓDIGO DEL MUNICIPIO IES
+    municipioDeDomicilioDeLaIes = vectorConInfo[mapPosiciones["MUNICIPIO_DE_DOMICILIO_DE_LA_IES"]];        // MUNICIPIO DE DOMICILIO DE LA IES
+    codigoSniesDelPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_SNIES_DEL_PROGRAMA"]]);       // CÓDIGO SNIES DEL PROGRAMA
+    a = vectorConInfo[mapPosiciones["PROGRAMA_ACADÉMICO"]];                                  // PROGRAMA ACADÉMICO
+    idNivelAcademico = stoi(vectorConInfo[mapPosiciones["ID_NIVEL_ACADÉMICO"]]);             // ID NIVEL ACADÉMICO
+    nivelAcademico = vectorConInfo[mapPosiciones["NIVEL_ACADÉMICO"]];                     // NIVEL ACADÉMICO
+    idNivelDeFormacion = stoi(vectorConInfo[mapPosiciones["ID_NIVEL_DE_FORMACIÓN"]]);             // ID NIVEL DE FORMACIÓN
+    nivelDeFormacion = vectorConInfo[mapPosiciones["NIVEL_DE_FORMACIÓN"]];                   // NIVEL DE FORMACIÓN
+    idMetodologia = stoi(vectorConInfo[mapPosiciones["ID_METODOLOGÍA"]]);                // ID METODOLOGÍA
+    metodologia = vectorConInfo[mapPosiciones["METODOLOGÍA"]];                        // METODOLOGÍA
+    idArea = stoi(vectorConInfo[mapPosiciones["ID_ÁREA_DE_CONOCIMIENTO"]]);                       // ID ÁREA
+    areaDeConocimiento = vectorConInfo[mapPosiciones["ÁREA_DE_CONOCIMIENTO"]];                 // ÁREA DE CONOCIMIENTO
+    idNucleo = stoi(vectorConInfo[mapPosiciones["ID_NÚCLEO"]]);                     // ID NÚCLEO
+    nucleoBasicoDelConocimientoNbc = vectorConInfo[mapPosiciones["NÚCLEO_BÁSICO_DEL_CONOCIMIENTO_(NBC)"]];     // NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
+    idCineCampoAmplio = stoi(vectorConInfo[mapPosiciones["ID_CINE_CAMPO_AMPLIO"]]);            // ID CINE CAMPO AMPLIO
+    descCineCampoAmplio = vectorConInfo[mapPosiciones["DESC_CINE_CAMPO_AMPLIO"]];                // DESC CINE CAMPO AMPLIO
+    idCineCampoEspecifico = stoi(vectorConInfo[mapPosiciones["ID_CINE_CAMPO_ESPECIFICO"]]);        // ID CINE CAMPO ESPECÍFICO
+    descCineCampoEspecifico = vectorConInfo[mapPosiciones["DESC_CINE_CAMPO_ESPECIFICO"]];            // DESC CINE CAMPO ESPECÍFICO
+    idCineCodigoDetallado = stoi(vectorConInfo[mapPosiciones["ID_CINE_CODIGO_DETALLADO"]]);        // ID CINE CÓDIGO DETALLADO
+    descCineCodigoDetallado = vectorConInfo[mapPosiciones["DESC_CINE_CODIGO_DETALLADO"]];            // DESC CINE CÓDIGO DETALLADO
+    codigoDelDepartamentoPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_DEPARTAMENTO_(PROGRAMA)"]]);    // CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
+    departamentoDeOfertaDelPrograma = vectorConInfo[mapPosiciones["DEPARTAMENTO_DE_OFERTA_DEL_PROGRAMA"]];    // DEPARTAMENTO DE OFERTA DEL PROGRAMA
+    codigoDelMunicipioPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_MUNICIPIO_(PROGRAMA)"]]);   // CÓDIGO DEL MUNICIPIO (PROGRAMA)
+    municipioDeOfertaDelPrograma = vectorConInfo[mapPosiciones["MUNICIPIO_DE_OFERTA_DEL_PROGRAMA"]];       // MUNICIPIO DE OFERTA DEL PROGRAMA
 }
 
 ProgramaAcademico::~ProgramaAcademico()
@@ -416,3 +421,47 @@ ProgramaAcademico::~ProgramaAcademico()
         delete consolidado;
     }
 }
+
+
+/*
+    CÓDIGO DE LA INSTITUCIÓN;
+    CÓDIGO DE LA INSTITUCIÓN;
+    IES_PADRE;
+    INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES);
+    PRINCIPAL O SECCIONAL;
+    ID SECTOR IES;
+    SECTOR IES;
+    ID CARACTER;
+    CARACTER IES;
+    CÓDIGO DEL DEPARTAMENTO (IES);
+    DEPARTAMENTO DE DOMICILIO DE LA IES;
+    CÓDIGO DEL MUNICIPIO IES;
+    MUNICIPIO DE DOMICILIO DE LA IES;
+    CÓDIGO SNIES DEL PROGRAMA;
+    PROGRAMA ACADÉMICO;
+    ID NIVEL ACADÉMICO;
+    NIVEL ACADÉMICO;
+    ID NIVEL DE FORMACIÓN;
+    NIVEL DE FORMACIÓN;
+    ID METODOLOGÍA;
+    METODOLOGÍA;
+    ID ÁREA;
+    ÁREA DE CONOCIMIENTO;
+    ID NÚCLEO;
+    NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC);
+    ID CINE CAMPO AMPLIO;
+    DESC CINE CAMPO AMPLIO;
+    ID CINE CAMPO ESPECIFICO;
+    DESC CINE CAMPO ESPECIFICO;
+    ID CINE CODIGO DETALLADO;
+    DESC CINE CODIGO DETALLADO;
+    CÓDIGO DEL DEPARTAMENTO (PROGRAMA);
+    DEPARTAMENTO DE OFERTA DEL PROGRAMA;
+    CÓDIGO DEL MUNICIPIO (PROGRAMA);
+    MUNICIPIO DE OFERTA DEL PROGRAMA;
+    ID SEXO;
+    SEXO;
+    AÑO;
+    SEMESTRE;
+    ADMITIDOS;
+     */

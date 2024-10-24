@@ -27,7 +27,7 @@ private:
     int graduados;
 
 public:
-    Consolidado();
+    Consolidado() = default;
     // Mantenimiento: Gran cantidad de atributos en la firma del constructor
     Consolidado(int, string, int, int, int, int, int, int, int);
 

@@ -162,10 +162,13 @@ public:
     void setConsolidado(Consolidado *, int);
     Consolidado *getConsolidado(int);
 
-    void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
     Consolidado * getConsolidadoDeMapa(int anio, int idSexo, int semestre);
+    map<int, map<int, map<int, Consolidado *>>> getMapaDeConsolidados();
 
-    void setTodoElProgramaAcademico(vector<string> vectorConInfo);
+    void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
+
+
+    void setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones);
 
 
     ~ProgramaAcademico();
