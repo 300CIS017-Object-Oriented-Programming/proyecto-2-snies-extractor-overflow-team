@@ -9,9 +9,10 @@
 
 using namespace std;
 
-bool GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
 {
-    bool estadoCreacion = false;
+    vector<string> etiquetasColumnas;   // Está vacío. Se puso solo para que el código no muera.
+    // FIXME: ARREGLAR PARA QUE FUNCIONE CON EL MAPA DE CONSOLIDADOS. VER EJEMPLO DE GestorCsv
     string rutaCompleta = ruta + "resultados.txt";
     ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
@@ -57,6 +58,7 @@ bool GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
             archivoResultados << etiquetasColumnas[33] << ": " << programa->getMunicipioDeOfertaDelPrograma() << endl;
             // Agregamos los consolidados del programa
             archivoResultados << "Consolidados:" << endl;
+            /*
             for (int i = 0; i < 8; ++i)
             {
                 Consolidado *consolidadoActual = programa->getConsolidado(i);
@@ -71,87 +73,14 @@ bool GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
                 archivoResultados << "    MATRICULADOS: " << consolidadoActual->getMatriculados() << endl;
                 archivoResultados << "    MATR. PRIMER SEMESTRE: " << consolidadoActual->getMatriculadosPrimerSemestre() << endl;
             }
+            */
             archivoResultados << endl; // Espacio entre programas
         }
         // Cambiamos el valor del booleano si logramos llegar hasta este punto
-        estadoCreacion = true;
         cout << "Archivo Creado en: " << rutaCompleta << endl;
     }
     archivoResultados.close();
-    return estadoCreacion;
-}
 
-bool GestorTxt::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
-{
-    bool estadoCreacion = false;
-    string rutaCompleta = ruta + "buscados.txt";
-    ofstream archivoBuscados(rutaCompleta);
-    if (archivoBuscados.is_open())
-    {
-        // Escribimos las etiquetas al principio del archivo (separadas por espacios)
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoBuscados << etiquetasColumnas[i] << " ";
-        }
-        archivoBuscados << "GRADUADOS INSCRITOS MATRICULADOS NEOS" << endl;
-        // Recorremos la lista de programas buscados
-        list<ProgramaAcademico *>::iterator it;
-        for (it = programasBuscados.begin(); it != programasBuscados.end(); ++it)
-        {
-            for (int i = 0; i < 8; i++) // Iterar sobre los consolidados
-            {
-                archivoBuscados << (*it)->getCodigoDeLaInstitucion() << " "
-                                << (*it)->getIesPadre() << " "
-                                << (*it)->getInstitucionDeEducacionSuperiorIes() << " "
-                                << (*it)->getPrincipalOSeccional() << " "
-                                << (*it)->getIdSectorIes() << " "
-                                << (*it)->getSectorIes() << " "
-                                << (*it)->getIdCaracter() << " "
-                                << (*it)->getCaracterIes() << " "
-                                << (*it)->getCodigoDelDepartamentoIes() << " "
-                                << (*it)->getDepartamentoDeDomicilioDeLaIes() << " "
-                                << (*it)->getCodigoDelMunicipioIes() << " "
-                                << (*it)->getMunicipioDeDomicilioDeLaIes() << " "
-                                << (*it)->getCodigoSniesDelPrograma() << " "
-                                << (*it)->getProgramaAcademico() << " "
-                                << (*it)->getIdNivelAcademico() << " "
-                                << (*it)->getNivelAcademico() << " "
-                                << (*it)->getIdNivelDeFormacion() << " "
-                                << (*it)->getNivelDeFormacion() << " "
-                                << (*it)->getIdMetodologia() << " "
-                                << (*it)->getMetodologia() << " "
-                                << (*it)->getIdArea() << " "
-                                << (*it)->getAreaDeConocimiento() << " "
-                                << (*it)->getIdNucleo() << " "
-                                << (*it)->getNucleoBasicoDelConocimientoNbc() << " "
-                                << (*it)->getIdCineCampoAmplio() << " "
-                                << (*it)->getDescCineCampoAmplio() << " "
-                                << (*it)->getIdCineCampoEspecifico() << " "
-                                << (*it)->getDescCineCampoEspecifico() << " "
-                                << (*it)->getIdCineCodigoDetallado() << " "
-                                << (*it)->getDescCineCodigoDetallado() << " "
-                                << (*it)->getCodigoDelDepartamentoPrograma() << " "
-                                << (*it)->getDepartamentoDeOfertaDelPrograma() << " "
-                                << (*it)->getCodigoDelMunicipioPrograma() << " "
-                                << (*it)->getMunicipioDeOfertaDelPrograma() << " ";
-                // Información del consolidado
-                Consolidado *consolidadoActual = (*it)->getConsolidado(i);
-                archivoBuscados << consolidadoActual->getIdSexo() << " "
-                                << consolidadoActual->getSexo() << " "
-                                << consolidadoActual->getAno() << " "
-                                << consolidadoActual->getSemestre() << " "
-                                << consolidadoActual->getAdmitidos() << " "
-                                << consolidadoActual->getGraduados() << " "
-                                << consolidadoActual->getInscritos() << " "
-                                << consolidadoActual->getMatriculados() << " "
-                                << consolidadoActual->getMatriculadosPrimerSemestre() << endl;
-            }
-        }
-        estadoCreacion = true;
-        cout << "Archivo TXT creado en: " << rutaCompleta << endl;
-    }
-    archivoBuscados.close();
-    return estadoCreacion;
 }
 
 bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)

@@ -9,6 +9,7 @@
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
 #include "GestorCsv.h"
+#include "GestorTxt.h"
 
 using namespace std;
 

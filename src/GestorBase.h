@@ -17,8 +17,7 @@ class GestorBase
 {
 public:
     virtual  ~GestorBase() = default;
-    virtual bool crearArchivo(string&, map<int, ProgramaAcademico*>&, vector<string>) = 0;
-    virtual bool crearArchivoBuscados(string&, list<ProgramaAcademico*>&, vector<string>) = 0;
+    virtual void crearArchivo(string&, map<int, ProgramaAcademico*>&) = 0;
     virtual bool crearArchivoExtra(string&, vector<vector<string>>) = 0;
 };
 

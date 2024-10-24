@@ -1,6 +1,9 @@
 #include "SNIESController.h"
 
- using namespace std;
+#include "GestorJson.h"
+#include "GestorTxt.h"
+
+using namespace std;
 
 SNIESController::SNIESController()
 {
@@ -41,18 +44,16 @@ SNIESController::~SNIESController()
 
 void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
 {
-    vector<int> codigosSnies;
     vector<vector<string>> programasAcademicosVector;
     int anoInicio = stoi(ano1);
     int anoFin = stoi(ano2);
-    int codigoSniesActual;
     // cout << "antes leer programas csv" << endl;
-    codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
+    vector<int> codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
 
     for (int i = 0; i < codigosSnies.size(); i++)
     {
         ProgramaAcademico *programaAcademico = new ProgramaAcademico();
-        codigoSniesActual = codigosSnies[i];
+        int codigoSniesActual = codigosSnies[i];
         programaAcademico->setCodigoSniesDelPrograma(codigoSniesActual);
         programasAcademicos[codigoSniesActual] = programaAcademico;
     }
@@ -60,15 +61,37 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     bool primeraLectura = true;
     for(int ano = anoInicio; ano <= anoFin; ano++) {
         string anoAEvaluar = to_string(ano);
-        gestorCsvObj->leerArchivoFinal(rutaAdmitidos, anoAEvaluar, programasAcademicos, primeraLectura, "admitidos");
+        gestorCsvObj->leerArchivo(rutaAdmitidos, anoAEvaluar, programasAcademicos, primeraLectura, "admitidos");
         primeraLectura = false;
-        gestorCsvObj->leerArchivoFinal(rutaGraduados, anoAEvaluar, programasAcademicos, false, "graduados");
-        gestorCsvObj->leerArchivoFinal(rutaInscritos, anoAEvaluar, programasAcademicos, false, "inscritos");
-        gestorCsvObj->leerArchivoFinal(rutaMatriculados, anoAEvaluar, programasAcademicos, false, "matriculados");
-        gestorCsvObj->leerArchivoFinal(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos");
+        gestorCsvObj->leerArchivo(rutaGraduados, anoAEvaluar, programasAcademicos, false, "graduados");
+        gestorCsvObj->leerArchivo(rutaInscritos, anoAEvaluar, programasAcademicos, false, "inscritos");
+        gestorCsvObj->leerArchivo(rutaMatriculados, anoAEvaluar, programasAcademicos, false, "matriculados");
+        gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos");
     }
 
-    gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos, etiquetasColumnas);
+    string opcionArchivoAExportar;
+    cout << "A que tipo de archivo quiere exportar el archivo?: " << endl;
+    cout << "1. Csv \n2. Txt \n3. Json: " << endl;
+    cin >> opcionArchivoAExportar;
+
+    while (opcionArchivoAExportar != "1" && opcionArchivoAExportar != "2" && opcionArchivoAExportar != "3") {
+        cout << "Seleccione una opcion valida: " << endl;
+        cin >> opcionArchivoAExportar;
+    }
+    if (opcionArchivoAExportar == "1") {
+        gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+
+    }
+    else if (opcionArchivoAExportar == "2") {
+        GestorTxt *gestorTxtObj = new GestorTxt();
+        gestorTxtObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+
+    }
+    else if (opcionArchivoAExportar == "3"){
+        GestorJson * gestorJsonObj = new GestorJson();
+        gestorJsonObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+    }
+
 }
 
 void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
@@ -93,10 +116,10 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
 
     if (flag)
     {
-        gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados, etiquetasColumnas);
+        gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
     }
 }
-
+/*
 void SNIESController::calcularDatosExtra(bool flag)
 {
     vector<vector<string>> matrizFinal;
@@ -233,3 +256,4 @@ void SNIESController::calcularDatosExtra(bool flag)
         creado = gestorCsvObj->crearArchivoExtra(rutaOutput, matrizFinal);
     }
 }
+*/

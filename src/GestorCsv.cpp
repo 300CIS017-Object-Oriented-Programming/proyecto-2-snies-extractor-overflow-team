@@ -29,7 +29,7 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     return codigosSniesRetorno;
 }
 
-void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar)
+void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar)
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
@@ -162,18 +162,13 @@ void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, Program
     archivo.close();
 }
 
-void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
 {
     string DELIMITADOR = ";";
     ofstream archivoResultados(ruta);
     if (archivoResultados.is_open())
     {
         // Imprimimos en el archivo las etiquetas (Primera fila)
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoResultados << etiquetasColumnas[i] << ";";
-        }
-
         archivoResultados << "\xEF\xBB\xBF";    // Permite escribir los caracteres con tildes correctamente
         archivoResultados << "CÓDIGO DE LA INSTITUCIÓN" << DELIMITADOR;
         archivoResultados << "IES_PADRE" << DELIMITADOR;

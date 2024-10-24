@@ -17,8 +17,7 @@ using namespace std;
 class GestorTxt : public GestorBase
 {
 public:
-    bool crearArchivo(string&, map<int, ProgramaAcademico*>&, vector<string>) override;
-    bool crearArchivoBuscados(string&, list<ProgramaAcademico*>&, vector<string>) override;
+    void crearArchivo(string&, map<int, ProgramaAcademico*>&) override;
     bool crearArchivoExtra(string&, vector<vector<string>>) override;
 };
 

@@ -128,12 +128,12 @@ void View::mostrarDatosExtra()
     // Simplificar el código de acuerdo a ese ajuste
     if (opcionYN == 'y')
     {
-        controlador.calcularDatosExtra(true);
+        //controlador.calcularDatosExtra(true);
     }
 
     else
     {
-        controlador.calcularDatosExtra(false);
+        //controlador.calcularDatosExtra(false);
     }
 }
 
