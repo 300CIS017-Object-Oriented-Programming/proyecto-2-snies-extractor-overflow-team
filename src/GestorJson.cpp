@@ -8,9 +8,10 @@
 
 using namespace std;
 
-bool GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
+void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
 {
-    bool estadoCreacion = false;
+    vector<string> etiquetasColumnas;   // Está vacío. Se puso solo para que el código no muera.
+    // FIXME: ARREGLAR PARA QUE FUNCIONE CON EL MAPA DE CONSOLIDADOS. VER EJEMPLO DE GestorCsv
     string rutaCompleta = ruta + "resultados.json";
     ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
@@ -58,6 +59,7 @@ bool GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
             programaJson[etiquetasColumnas[33]] = programa->getMunicipioDeOfertaDelPrograma();
             // Agregamos los consolidados del programa
             json consolidadosJson = json::array();
+            /*
             for (int i = 0; i < 8; ++i)
             {
                 Consolidado *consolidadoActual = programa->getConsolidado(i);
@@ -73,6 +75,7 @@ bool GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
                 consolidadoJson["MATRICULADOS_PRIMER_SEMESTRE"] = consolidadoActual->getMatriculadosPrimerSemestre();
                 consolidadosJson.push_back(consolidadoJson);
             }
+            */
             // Asignamos el array de consolidados al programa
             programaJson["Consolidados"] = consolidadosJson;
 
@@ -81,86 +84,10 @@ bool GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
         }
         // Escribimos el JSON en el archivo
         archivoResultados << resultadoJson.dump(4);
-        estadoCreacion = true;
+
         cout << "Archivo Creado en: " << rutaCompleta << endl;
     }
     archivoResultados.close();
-    return estadoCreacion;
-}
-
-bool GestorJson::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
-{
-    bool estadoCreacion = false;
-    string rutaCompleta = ruta + "buscados.csv";
-    ofstream archivoBuscados(rutaCompleta);
-    if (archivoBuscados.is_open())
-    {
-        // Imprimimos las etiquetas
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoBuscados << etiquetasColumnas[i] << ";";
-        }
-        archivoBuscados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
-        // Iteramos sobre los programas buscados
-        for (list<ProgramaAcademico *>::iterator it = programasBuscados.begin(); it != programasBuscados.end(); ++it)
-        {
-            ProgramaAcademico *programa = *it;
-            // Imprimimos los 8 consolidados del programa
-            for (int i = 0; i < 8; i++)
-            {
-                archivoBuscados << programa->getCodigoDeLaInstitucion() << ";"
-                                << programa->getIesPadre() << ";"
-                                << programa->getInstitucionDeEducacionSuperiorIes() << ";"
-                                << programa->getPrincipalOSeccional() << ";"
-                                << programa->getIdSectorIes() << ";"
-                                << programa->getSectorIes() << ";"
-                                << programa->getIdCaracter() << ";"
-                                << programa->getCaracterIes() << ";"
-                                << programa->getCodigoDelDepartamentoIes() << ";"
-                                << programa->getDepartamentoDeDomicilioDeLaIes() << ";"
-                                << programa->getCodigoDelMunicipioIes() << ";"
-                                << programa->getMunicipioDeDomicilioDeLaIes() << ";"
-                                << programa->getCodigoSniesDelPrograma() << ";"
-                                << programa->getProgramaAcademico() << ";"
-                                << programa->getIdNivelAcademico() << ";"
-                                << programa->getNivelAcademico() << ";"
-                                << programa->getIdNivelDeFormacion() << ";"
-                                << programa->getNivelDeFormacion() << ";"
-                                << programa->getIdMetodologia() << ";"
-                                << programa->getMetodologia() << ";"
-                                << programa->getIdArea() << ";"
-                                << programa->getAreaDeConocimiento() << ";"
-                                << programa->getIdNucleo() << ";"
-                                << programa->getNucleoBasicoDelConocimientoNbc() << ";"
-                                << programa->getIdCineCampoAmplio() << ";"
-                                << programa->getDescCineCampoAmplio() << ";"
-                                << programa->getIdCineCampoEspecifico() << ";"
-                                << programa->getDescCineCampoEspecifico() << ";"
-                                << programa->getIdCineCodigoDetallado() << ";"
-                                << programa->getDescCineCodigoDetallado() << ";"
-                                << programa->getCodigoDelDepartamentoPrograma() << ";"
-                                << programa->getDepartamentoDeOfertaDelPrograma() << ";"
-                                << programa->getCodigoDelMunicipioPrograma() << ";"
-                                << programa->getMunicipioDeOfertaDelPrograma() << ";";
-                // Información del consolidado
-                Consolidado *consolidadoActual = programa->getConsolidado(i);
-                archivoBuscados << consolidadoActual->getIdSexo() << ";"
-                                << consolidadoActual->getSexo() << ";"
-                                << consolidadoActual->getAno() << ";"
-                                << consolidadoActual->getSemestre() << ";"
-                                << consolidadoActual->getAdmitidos() << ";"
-                                << consolidadoActual->getGraduados() << ";"
-                                << consolidadoActual->getInscritos() << ";"
-                                << consolidadoActual->getMatriculados() << ";"
-                                << consolidadoActual->getMatriculadosPrimerSemestre() << endl;
-            }
-        }
-        estadoCreacion = true;
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
-    }
-
-    archivoBuscados.close();
-    return estadoCreacion;
 }
 
 bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
