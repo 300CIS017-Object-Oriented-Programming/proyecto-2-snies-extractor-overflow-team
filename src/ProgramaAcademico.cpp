@@ -138,12 +138,12 @@ int ProgramaAcademico::getCodigoSniesDelPrograma()
 
 void ProgramaAcademico::setProgramaAcademico(string &nuevoProgramaAcademico)
 {
-    programaAcademico = nuevoProgramaAcademico;
+    a = nuevoProgramaAcademico;
 }
 
 string ProgramaAcademico::getProgramaAcademico()
 {
-    return programaAcademico;
+    return a;
 }
 
 void ProgramaAcademico::setIdNivelAcademico(int nuevoIdNivelAcademico)
@@ -349,7 +349,7 @@ void ProgramaAcademico::setMapConsolidados(int anio, int idSexo, int semestre, C
     mapConsolidados[anio][idSexo][semestre] = consolidado;
 }
 
-Consolidado * ProgramaAcademico::getMapConsolidados(int anio, int idSexo, int semestre)
+Consolidado * ProgramaAcademico::getConsolidadoDeMapa(int anio, int idSexo, int semestre)
 // (Función solicitada a ChatGPT)
 // Evalúa si el consolidado existe para que no se creen entradas indeseadas cómo cuando se accede con []
 {
@@ -370,7 +370,44 @@ Consolidado * ProgramaAcademico::getMapConsolidados(int anio, int idSexo, int se
     // Si no existe la combinación de claves, retornamos nullptr
     return nullptr;
 }
-
+// TODO: HACER FUNCIÓN PARA SETTEAR TODO EL PROGRAMA ACADÉMICO.
+void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo)
+{
+    codigoDeLaInstitucion = stoi(vectorConInfo[0]);         // CÓDIGO DE LA INSTITUCIÓN
+    iesPadre = stoi(vectorConInfo[1]);                      // IES_PADRE
+    institucionDeEducacionSuperiorIes = vectorConInfo[2];   // INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
+    principalOSeccional = vectorConInfo[3];                 // PRINCIPAL O SECCIONAL
+    idSectorIes = stoi(vectorConInfo[4]);                   // ID SECTOR IES
+    sectorIes = vectorConInfo[5];                           // SECTOR IES
+    idCaracter = stoi(vectorConInfo[6]);                    // ID CARÁCTER
+    caracterIes = vectorConInfo[7];                         // CARACTER IES
+    codigoDelDepartamentoIes = stoi(vectorConInfo[8]);      // CÓDIGO DEL DEPARTAMENTO (IES)
+    departamentoDeDomicilioDeLaIes = vectorConInfo[9];      // DEPARTAMENTO DE DOMICILIO DE LA IES
+    codigoDelMunicipioIes = stoi(vectorConInfo[10]);        // CÓDIGO DEL MUNICIPIO IES
+    municipioDeDomicilioDeLaIes = vectorConInfo[11];        // MUNICIPIO DE DOMICILIO DE LA IES
+    codigoSniesDelPrograma = stoi(vectorConInfo[12]);       // CÓDIGO SNIES DEL PROGRAMA
+    a = vectorConInfo[13];                                  // PROGRAMA ACADÉMICO
+    idNivelAcademico = stoi(vectorConInfo[14]);             // ID NIVEL ACADÉMICO
+    nivelAcademico = vectorConInfo[15];                     // NIVEL ACADÉMICO
+    idNivelDeFormacion = stoi(vectorConInfo[16]);             // ID NIVEL DE FORMACIÓN
+    nivelDeFormacion = vectorConInfo[17];                   // NIVEL DE FORMACIÓN
+    idMetodologia = stoi(vectorConInfo[18]);                // ID METODOLOGÍA
+    metodologia = vectorConInfo[19];                        // METODOLOGÍA
+    idArea = stoi(vectorConInfo[20]);                       // ID ÁREA
+    areaDeConocimiento = vectorConInfo[21];                 // ÁREA DE CONOCIMIENTO
+    idNucleo = stoi(vectorConInfo[22]);                     // ID NÚCLEO
+    nucleoBasicoDelConocimientoNbc = vectorConInfo[23];     // NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
+    idCineCampoAmplio = stoi(vectorConInfo[24]);            // ID CINE CAMPO AMPLIO
+    descCineCampoAmplio = vectorConInfo[25];                // DESC CINE CAMPO AMPLIO
+    idCineCampoEspecifico = stoi(vectorConInfo[26]);        // ID CINE CAMPO ESPECÍFICO
+    descCineCampoEspecifico = vectorConInfo[27];            // DESC CINE CAMPO ESPECÍFICO
+    idCineCodigoDetallado = stoi(vectorConInfo[28]);        // ID CINE CÓDIGO DETALLADO
+    descCineCodigoDetallado = vectorConInfo[29];            // DESC CINE CÓDIGO DETALLADO
+    codigoDelDepartamentoPrograma = stoi(vectorConInfo[30]);    // CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
+    departamentoDeOfertaDelPrograma = vectorConInfo[31];    // DEPARTAMENTO DE OFERTA DEL PROGRAMA
+    codigoDelMunicipioPrograma = stoi(vectorConInfo[32]);   // CÓDIGO DEL MUNICIPIO (PROGRAMA)
+    municipioDeOfertaDelPrograma = vectorConInfo[33];       // MUNICIPIO DE OFERTA DEL PROGRAMA
+}
 
 ProgramaAcademico::~ProgramaAcademico()
 {

@@ -46,11 +46,23 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     int ano;
     int anoInicio = stoi(ano1);
     int anoFin = stoi(ano2);
+    int codigoSniesActual;
     // cout << "antes leer programas csv" << endl;
     codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
-    // cout << "despues leer programas csv" << endl;
-    programasAcademicosVector = gestorCsvObj->leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
-    // cout << "despues leer archivos Primera" << endl;
+
+    for (int i = 0; i < codigosSnies.size(); i++)
+    {
+        ProgramaAcademico *programaAcademico = new ProgramaAcademico();
+        codigoSniesActual = codigosSnies[i];
+        programaAcademico->setCodigoSniesDelPrograma(codigoSniesActual);
+        programasAcademicos[codigoSniesActual] = programaAcademico;
+    }
+
+    //programasAcademicosVector = gestorCsvObj->leerArchivoPrimera(rutaAdmitidos, ano1, codigosSnies);
+
+    gestorCsvObj->leerArchivoFinal(rutaAdmitidos, ano1, programasAcademicos, true, "admitidos");
+    gestorCsvObj->leerArchivoFinal(rutaAdmitidos, ano2, programasAcademicos, false, "admitidos");
+
     etiquetasColumnas = programasAcademicosVector[0];
     for (int i = 1; i < programasAcademicosVector.size(); i += 4)
     {
@@ -100,7 +112,7 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
             consolidado[m]->setAdmitidos(stoi(programasAcademicosVector[i + m][38]));
             programaAcademico->setConsolidado(consolidado[m], m);
         }
-        programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
+        //programasAcademicos.emplace(programaAcademico->getCodigoSniesDelPrograma(), programaAcademico);
     }
     for(ano = anoInicio; ano <= anoFin; ano++)
     {

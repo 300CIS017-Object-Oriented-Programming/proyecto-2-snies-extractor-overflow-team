@@ -83,7 +83,7 @@ vector<vector<string>> GestorCsv::leerArchivoPrimera(string &rutaBase, string &a
             // Verificamos que la fila no sea una fila de error
             if (vectorFila[POS_COD_SNIES] != "Sin programa especifico")
             {
-                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[12]));
+                it = find(codigosSnies.begin(), codigosSnies.end(), stoi(vectorFila[POS_COD_SNIES]));
             }
             else
             {
@@ -323,34 +323,12 @@ vector<vector<string>> GestorCsv::leerArchivo(string &rutaBase, string &ano, vec
         }
     }
 
-
     archivoSegundo.close();
 
     return matrizResultado;
 }
 
-vector<string> GestorCsv::leerEtiquetasArchivo(ifstream &archivo, int CANT_COLUMNAS_ARCHIVO)
-{
-    string fila;
-    string dato;
-    vector<string> vectorFila;
-    stringstream streamFila;
-    int columna;
-
-    vectorFila = vector<string>(CANT_COLUMNAS_ARCHIVO);
-    streamFila = stringstream(fila);
-    columna = 0;
-    while ((getline(streamFila, dato, ';')))
-    {
-
-        vectorFila[columna] = dato;
-        columna++;
-    }
-
-    return vectorFila;
-}
-
-vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool &primeraVez, string &atributoAModificar)
+void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar)
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
@@ -373,15 +351,17 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
     }
     else
     {
+        // FIXME : BORRAR LINEA
+        cout << "El archivo " << rutaCompleta << " abrio correctamente" << endl;
         string fila;
         string dato;
-        vector<string> vectorFila;
-        stringstream streamFila;
-        int columna;
         string codSniesActual;
-        // vector<int>::iterator it;
+        int columna;
+        vector<string> vectorFila(TAMANIO_ARCHIVO);
+        stringstream streamFila;
+        ProgramaAcademico * progAcademicoActual;
+
         size_t existeEnMapaProgsAcademicos;
-        size_t existeEnMapaConsolidados;
 
         // Primera iteracion del ciclo para leer las etiquetas
         getline(archivo, fila);
@@ -389,8 +369,16 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
         // Si es la primera lectura, guardamos las etiquetas y la agregamos a la matriz de resultados
         if (primeraVez)
         {
-            vector<string> vectorConEtiquetas = leerEtiquetasArchivo(archivo, TAMANIO_ARCHIVO);
-            matrizResultado.push_back(vectorConEtiquetas);
+            // vectorFila = vector<string>(TAMANIO_ARCHIVO);
+            streamFila = stringstream(fila);
+            columna = 0;
+            while ((getline(streamFila, dato, ';')))
+            {
+
+                vectorFila[columna] = dato;
+                columna++;
+            }
+            matrizResultado.push_back(vectorFila);
         }
         // Si no es la primera lectura, no agregamos nada a la matriz de resultados.
 
@@ -428,6 +416,7 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
                     vectorFila[columna] = dato;
                     columna++;
                 }
+                matrizResultado.push_back(vectorFila);
 
                 int COD_SNIES = stoi(vectorFila[POS_COD_SNIES]);
                 int ID_SEXO = stoi(vectorFila[POS_ID_SEXO]);
@@ -437,9 +426,11 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
                 int ULTIMA_COLUMNA = stoi(vectorFila[POS_ULTIMA_COLUMNA]);
 
                 // Accedemos al ProgramaAcademico * desde el mapa
-                ProgramaAcademico * progAcademicoActual = mapaProgramasAcademicos[COD_SNIES];
-                // FIXME: CAMBIAR EL NOMBRE DE LA FUNCION getMapConsolidado POR getConsolidadoDeMapa cuando acabe de hacer toda la transición de vector a mapa
-                Consolidado * consolidadoActual = progAcademicoActual->getMapConsolidados(ANIO, ID_SEXO, SEMESTRE);
+                progAcademicoActual = mapaProgramasAcademicos[COD_SNIES];
+                // Setteamos el programa académico
+                progAcademicoActual->setTodoElProgramaAcademico(vectorFila);
+
+                Consolidado * consolidadoActual = progAcademicoActual->getConsolidadoDeMapa(ANIO, ID_SEXO, SEMESTRE);
 
                 // En caso de que el consolidado no exista, se crea uno y se settea en el mapa
                 if (consolidadoActual == nullptr)
@@ -464,25 +455,6 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
                 else if (atributoAModificar == "graduados") {
                     consolidadoActual -> setGraduados(ULTIMA_COLUMNA);
                 }
-
-                // TODO: AQUI CREAR EL CONSOLIDADO Y AGREGARLO A mapaProgramasAcademicos QUE LE CORRESPONDE
-                // TODO: EDITAR EL CONSOLIDADO CON LOS VALORES DE LA FILA QUE ACABAMOS DE LEER.
-                // TODO: CREAR UN MAPA Y AGREGAR LOS VALORES GUARDADOS NO A UN VECTOR SINO A UN MAPA PARA LUEGO DE AHÍ SETTEAR LA INFORMACIÓN. SE PUEDE? COMO SE SETTEARÍAN?
-
-
-                // Leo y guardo filas restantes
-                for (int j = 0; j < 3; j++)
-                {
-                    getline(archivo, fila);
-                    streamFila = stringstream(fila);
-                    columna = 0;
-                    while ((getline(streamFila, dato, ';')))
-                    {
-                        vectorFila[columna] = dato;
-                        columna++;
-                    }
-                    matrizResultado.push_back(vectorFila);
-                }
             }
             // Si es de los programas que no me interesan, sigo a la siguiente fila, sin guardar la fila en la matriz de resultados
         }
@@ -490,8 +462,6 @@ vector<vector<string>> GestorCsv::leerArchivoFinal(string &rutaBase, string &ano
 
     archivo.close();
 
-    // FIXME: PARECE QUE NO SE NECESITA EXPORTAR NADA.
-    return matrizResultado;
 }
 
 bool GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
@@ -729,15 +699,6 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
         }
     }
     archivo.close();
-
-    // Imprimir el mapa
-    /*
-    cout << "" << endl;
-    for (const auto& par : mapaConPosiciones) {
-        cout << "Nombre: " << par.first << ", Posicion: " << par.second << endl;
-    }
-    */
-
     return mapaConPosiciones;
 }
 
