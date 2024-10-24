@@ -361,7 +361,6 @@ map<int, map<int, map<int, Consolidado *> > > ProgramaAcademico::getMapaDeConsol
     return mapConsolidados;
 }
 
-// TODO: HACER FUNCIÓN PARA SETTEAR TODO EL PROGRAMA ACADÉMICO.
 void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones)
 {
     codigoDeLaInstitucion = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DE_LA_INSTITUCIÓN" ]]);         // CÓDIGO DE LA INSTITUCIÓN

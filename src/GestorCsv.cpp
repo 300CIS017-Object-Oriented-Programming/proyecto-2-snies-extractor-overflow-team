@@ -1,5 +1,5 @@
 #include "GestorCsv.h"
-// FIXME: LA LECTURA DE ARCHIVOS CON GETLINE FUNCIONA HORRIBLEMENTE, NO TENEMOS IDEA DE POR QUÉ
+
 vector<int> GestorCsv::leerProgramasCsv(string &ruta)
 {
     vector<int> codigosSniesRetorno;
@@ -52,8 +52,6 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
     }
     else
     {
-        // FIXME : BORRAR LINEA
-        cout << "El archivo " << rutaCompleta << " abrio correctamente" << endl;
         string fila;
         string dato;
         string codSniesActual;
@@ -287,87 +285,6 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
 
     archivoResultados.close();
 }
-/*
-bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
-{
-    string rutaCompleta = ruta + "buscados.csv";
-    ofstream archivoBuscados(rutaCompleta);
-    if (archivoBuscados.is_open())
-    {
-
-        // Imprimimos en el archivo las etiquetas (Primera fila)
-        for (int i = 0; i < etiquetasColumnas.size(); i++)
-        {
-            archivoBuscados << etiquetasColumnas[i] << ";";
-        }
-        archivoBuscados << "GRADUADOS;INSCRITOS;MATRICULADOS;NEOS" << endl;
-
-        list<ProgramaAcademico *>::iterator it;
-        // Leemos todos los programas de la lista de los programas buscados para imprimirlos
-        for (it = programasBuscados.begin(); it != programasBuscados.end(); it++)
-        {
-
-            // Imprimimos los 8 consolidados del programa
-            for (int i = 0; i < 8; i++)
-            {
-                // Imprimimos la informacion base del programa
-                archivoBuscados << (*it)->getCodigoDeLaInstitucion() << ";";
-                archivoBuscados << (*it)->getIesPadre() << ";";
-                archivoBuscados << (*it)->getInstitucionDeEducacionSuperiorIes() << ";";
-                archivoBuscados << (*it)->getPrincipalOSeccional() << ";";
-                archivoBuscados << (*it)->getIdSectorIes() << ";";
-                archivoBuscados << (*it)->getSectorIes() << ";";
-                archivoBuscados << (*it)->getIdCaracter() << ";";
-                archivoBuscados << (*it)->getCaracterIes() << ";";
-                archivoBuscados << (*it)->getCodigoDelDepartamentoIes() << ";";
-                archivoBuscados << (*it)->getDepartamentoDeDomicilioDeLaIes() << ";";
-                archivoBuscados << (*it)->getCodigoDelMunicipioIes() << ";";
-                archivoBuscados << (*it)->getMunicipioDeDomicilioDeLaIes() << ";";
-                archivoBuscados << (*it)->getCodigoSniesDelPrograma() << ";";
-                archivoBuscados << (*it)->getProgramaAcademico() << ";";
-                archivoBuscados << (*it)->getIdNivelAcademico() << ";";
-                archivoBuscados << (*it)->getNivelAcademico() << ";";
-                archivoBuscados << (*it)->getIdNivelDeFormacion() << ";";
-                archivoBuscados << (*it)->getNivelDeFormacion() << ";";
-                archivoBuscados << (*it)->getIdMetodologia() << ";";
-                archivoBuscados << (*it)->getMetodologia() << ";";
-                archivoBuscados << (*it)->getIdArea() << ";";
-                archivoBuscados << (*it)->getAreaDeConocimiento() << ";";
-                archivoBuscados << (*it)->getIdNucleo() << ";";
-                archivoBuscados << (*it)->getNucleoBasicoDelConocimientoNbc() << ";";
-                archivoBuscados << (*it)->getIdCineCampoAmplio() << ";";
-                archivoBuscados << (*it)->getDescCineCampoAmplio() << ";";
-                archivoBuscados << (*it)->getIdCineCampoEspecifico() << ";";
-                archivoBuscados << (*it)->getDescCineCampoEspecifico() << ";";
-                archivoBuscados << (*it)->getIdCineCodigoDetallado() << ";";
-                archivoBuscados << (*it)->getDescCineCodigoDetallado() << ";";
-                archivoBuscados << (*it)->getCodigoDelDepartamentoPrograma() << ";";
-                archivoBuscados << (*it)->getDepartamentoDeOfertaDelPrograma() << ";";
-                archivoBuscados << (*it)->getCodigoDelMunicipioPrograma() << ";";
-                archivoBuscados << (*it)->getMunicipioDeOfertaDelPrograma() << ";";
-
-                // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
-                Consolidado *consolidadoActual = (*it)->getConsolidado(i);
-                archivoBuscados << consolidadoActual->getIdSexo() << ";";
-                archivoBuscados << consolidadoActual->getSexo() << ";";
-                archivoBuscados << consolidadoActual->getAno() << ";";
-                archivoBuscados << consolidadoActual->getSemestre() << ";";
-                archivoBuscados << consolidadoActual->getAdmitidos() << ";";
-                archivoBuscados << consolidadoActual->getGraduados() << ";";
-                archivoBuscados << consolidadoActual->getInscritos() << ";";
-                archivoBuscados << consolidadoActual->getMatriculados() << ";";
-                archivoBuscados << consolidadoActual->getMatriculadosPrimerSemestre();
-                // Saltamos de linea para la siguiente fila
-                archivoBuscados << endl;
-            }
-        }
-
-        // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
-    }
-    archivoBuscados.close();
-}
-*/
 
 bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
 {
@@ -405,9 +322,7 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
 }
 
 map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
-    // TODO: agregar las claves sin espacio y todo en mayúsculas
     map<string, int> mapaConPosiciones;
-
 
     ifstream archivo(rutaArchivo);
     // FIXME: manejar la excepción. Throw a dónde? Al SNIESController?

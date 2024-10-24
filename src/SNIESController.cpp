@@ -119,9 +119,10 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
         gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
     }
 }
-/*
+
 void SNIESController::calcularDatosExtra(bool flag)
 {
+    /*
     vector<vector<string>> matrizFinal;
     vector<vector<string>> matrizEtiquetas1;
     vector<vector<string>> matrizEtiquetas2;
@@ -255,5 +256,5 @@ void SNIESController::calcularDatosExtra(bool flag)
         bool creado;
         creado = gestorCsvObj->crearArchivoExtra(rutaOutput, matrizFinal);
     }
+    */
 }
-*/
