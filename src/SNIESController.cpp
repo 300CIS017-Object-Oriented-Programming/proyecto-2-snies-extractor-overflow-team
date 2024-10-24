@@ -11,7 +11,8 @@ SNIESController::SNIESController()
     rutaInscritos = "C:/SNIES_EXTRACTOR/inputs/inscritos";
     rutaMatriculados = "C:/SNIES_EXTRACTOR/inputs/matriculados";
     rutaMatriculadosPrimerSemestre = "C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre";
-    rutaOutput = "C:/SNIES_EXTRACTOR/outputs/";
+    rutaOutputResultados = "C:/SNIES_EXTRACTOR/outputs/resultados.csv";
+    rutaOutputFiltrado = "C:/SNIES_EXTRACTOR/outputs/buscados.csv";
 }
 
 
@@ -26,7 +27,7 @@ SNIESController::SNIESController(string &nuevaRutaProgramasCSV, string &nuevaRut
     rutaInscritos = nuevaRutaInscritos;
     rutaMatriculados = nuevaRutaMatriculadosc;
     rutaMatriculadosPrimerSemestre = nuevaRutaMatriculadosPrimerSemestre;
-    rutaOutput = nuevaRutaOutput;
+    rutaOutputResultados = nuevaRutaOutput;
 }
 
 SNIESController::~SNIESController()
@@ -67,12 +68,12 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         gestorCsvObj->leerArchivoFinal(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos");
     }
 
-    gestorCsvObj->crearArchivo(rutaOutput, programasAcademicos, etiquetasColumnas);
+    gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos, etiquetasColumnas);
 }
 
 void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
 {
-    list<ProgramaAcademico *> listaProgramas;
+    map<int, ProgramaAcademico *> mapaProgramasFiltrados;
     for (map<int, ProgramaAcademico *>::iterator it = programasAcademicos.begin(); it != programasAcademicos.end(); ++it)
     {
         ProgramaAcademico *programa = it->second;
@@ -80,16 +81,19 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
         int id = programa->getIdNivelDeFormacion();
         if (nombre.find(palabraClave) != string::npos && id == idComparacion)
         {
-            listaProgramas.push_back(programa);
+            mapaProgramasFiltrados[programa->getCodigoSniesDelPrograma()] = programa;
             // codigo SNIES, nombre del programa, codigo de la institucion, nombre de la institucion y metodología
-            cout << programa->getCodigoSniesDelPrograma() << ";" << programa->getProgramaAcademico() << ";" << programa->getCodigoDeLaInstitucion() << ";" << programa->getInstitucionDeEducacionSuperiorIes() << ";" << programa->getMetodologia() << endl;
+            cout << programa->getCodigoSniesDelPrograma() << ";"
+                 << programa->getProgramaAcademico() << ";"
+                 << programa->getCodigoDeLaInstitucion() << ";"
+                 << programa->getInstitucionDeEducacionSuperiorIes() << ";"
+                 << programa->getMetodologia() << endl;
         }
     }
 
     if (flag)
     {
-        bool creado;
-        creado = gestorCsvObj->crearArchivoBuscados(rutaOutput, listaProgramas, etiquetasColumnas);
+        gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados, etiquetasColumnas);
     }
 }
 

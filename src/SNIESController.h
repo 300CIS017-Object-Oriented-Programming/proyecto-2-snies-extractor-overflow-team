@@ -24,7 +24,8 @@ private:
     string rutaInscritos;
     string rutaMatriculados;
     string rutaMatriculadosPrimerSemestre;
-    string rutaOutput;
+    string rutaOutputResultados;
+    string rutaOutputFiltrado;
 
 public:
     SNIESController();

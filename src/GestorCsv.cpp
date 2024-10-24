@@ -164,8 +164,8 @@ void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, Program
 
 void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
 {
-    string rutaCompleta = ruta + "resultados.csv";
-    ofstream archivoResultados(rutaCompleta);
+    string DELIMITADOR = ";";
+    ofstream archivoResultados(ruta);
     if (archivoResultados.is_open())
     {
         // Imprimimos en el archivo las etiquetas (Primera fila)
@@ -175,49 +175,49 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
         }
 
         archivoResultados << "\xEF\xBB\xBF";    // Permite escribir los caracteres con tildes correctamente
-        archivoResultados << "CÓDIGO DE LA INSTITUCIÓN;"
-                             "IES_PADRE;"
-                             "INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES);"
-                             "PRINCIPAL O SECCIONAL;"
-                             "ID SECTOR IES;"
-                             "SECTOR IES;"
-                             "ID CARACTER;"
-                             "CARACTER IES;"
-                             "CÓDIGO DEL DEPARTAMENTO (IES);"
-                             "DEPARTAMENTO DE DOMICILIO DE LA IES;"
-                             "CÓDIGO DEL MUNICIPIO IES;"
-                             "MUNICIPIO DE DOMICILIO DE LA IES;"
-                             "CÓDIGO SNIES DEL PROGRAMA;"
-                             "PROGRAMA ACADÉMICO;"
-                             "ID NIVEL ACADÉMICO;"
-                             "NIVEL ACADÉMICO;"
-                             "ID NIVEL DE FORMACIÓN;"
-                             "NIVEL DE FORMACIÓN;"
-                             "ID METODOLOGÍA;"
-                             "METODOLOGÍA;"
-                             "ID ÁREA;"
-                             "ÁREA DE CONOCIMIENTO;"
-                             "ID NÚCLEO;"
-                             "NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC);"
-                             "ID CINE CAMPO AMPLIO;"
-                             "DESC CINE CAMPO AMPLIO;"
-                             "ID CINE CAMPO ESPECIFICO;"
-                             "DESC CINE CAMPO ESPECIFICO;"
-                             "ID CINE CODIGO DETALLADO;"
-                             "DESC CINE CODIGO DETALLADO;"
-                             "CÓDIGO DEL DEPARTAMENTO (PROGRAMA);"
-                             "DEPARTAMENTO DE OFERTA DEL PROGRAMA;"
-                             "CÓDIGO DEL MUNICIPIO (PROGRAMA);"
-                             "MUNICIPIO DE OFERTA DEL PROGRAMA;"
-                             "ID SEXO;"
-                             "SEXO;"
-                             "AÑO;"
-                             "SEMESTRE;"
-                             "ADMITIDOS;"
-                             "GRADUADOS;"
-                             "INSCRITOS;"
-                             "MATRICULADOS;"
-                             "NEOS" << endl;
+        archivoResultados << "CÓDIGO DE LA INSTITUCIÓN" << DELIMITADOR;
+        archivoResultados << "IES_PADRE" << DELIMITADOR;
+        archivoResultados << "INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)" << DELIMITADOR;
+        archivoResultados << "PRINCIPAL O SECCIONAL" << DELIMITADOR;
+        archivoResultados << "ID SECTOR IES" << DELIMITADOR;
+        archivoResultados << "SECTOR IES" << DELIMITADOR;
+        archivoResultados << "ID CARACTER" << DELIMITADOR;
+        archivoResultados << "CARACTER IES" << DELIMITADOR;
+        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (IES)" << DELIMITADOR;
+        archivoResultados << "DEPARTAMENTO DE DOMICILIO DE LA IES" << DELIMITADOR;
+        archivoResultados << "CÓDIGO DEL MUNICIPIO IES" << DELIMITADOR;
+        archivoResultados << "MUNICIPIO DE DOMICILIO DE LA IES" << DELIMITADOR;
+        archivoResultados << "CÓDIGO SNIES DEL PROGRAMA" << DELIMITADOR;
+        archivoResultados << "PROGRAMA ACADÉMICO" << DELIMITADOR;
+        archivoResultados << "ID NIVEL ACADÉMICO" << DELIMITADOR;
+        archivoResultados << "NIVEL ACADÉMICO" << DELIMITADOR;
+        archivoResultados << "ID NIVEL DE FORMACIÓN" << DELIMITADOR;
+        archivoResultados << "NIVEL DE FORMACIÓN" << DELIMITADOR;
+        archivoResultados << "ID METODOLOGÍA" << DELIMITADOR;
+        archivoResultados <<"METODOLOGÍA" << DELIMITADOR;
+        archivoResultados << "ID ÁREA" << DELIMITADOR;
+        archivoResultados << "ÁREA DE CONOCIMIENTO" << DELIMITADOR;
+        archivoResultados << "ID NÚCLEO" << DELIMITADOR;
+        archivoResultados << "NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)" << DELIMITADOR;
+        archivoResultados << "ID CINE CAMPO AMPLIO" << DELIMITADOR;
+        archivoResultados << "DESC CINE CAMPO AMPLIO" << DELIMITADOR;
+        archivoResultados << "ID CINE CAMPO ESPECIFICO" << DELIMITADOR;
+        archivoResultados << "DESC CINE CAMPO ESPECIFICO" << DELIMITADOR;
+        archivoResultados << "ID CINE CODIGO DETALLADO" << DELIMITADOR;
+        archivoResultados << "DESC CINE CODIGO DETALLADO" << DELIMITADOR;
+        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (PROGRAMA)" << DELIMITADOR;
+        archivoResultados << "DEPARTAMENTO DE OFERTA DEL PROGRAMA" << DELIMITADOR;
+        archivoResultados << "CÓDIGO DEL MUNICIPIO (PROGRAMA)" << DELIMITADOR;
+        archivoResultados << "MUNICIPIO DE OFERTA DEL PROGRAMA" << DELIMITADOR;
+        archivoResultados << "ID SEXO" << DELIMITADOR;
+        archivoResultados << "SEXO" << DELIMITADOR;
+        archivoResultados << "AÑO" << DELIMITADOR;
+        archivoResultados << "SEMESTRE" << DELIMITADOR;
+        archivoResultados << "ADMITIDOS" << DELIMITADOR;
+        archivoResultados << "GRADUADOS" << DELIMITADOR;
+        archivoResultados << "INSCRITOS" << DELIMITADOR;
+        archivoResultados << "MATRICULADOS" << DELIMITADOR;
+        archivoResultados << "NEOS" << endl;
 
         for (const auto &entryPrograma : mapadeProgramasAcademicos)
         {
@@ -287,12 +287,12 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
         }
 
         // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << rutaCompleta << endl;
+        cout << "Archivo Creado en: " << ruta << endl;
     }
 
     archivoResultados.close();
 }
-
+/*
 bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
 {
     string rutaCompleta = ruta + "buscados.csv";
@@ -372,6 +372,7 @@ bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &pr
     }
     archivoBuscados.close();
 }
+*/
 
 bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
 {
