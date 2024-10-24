@@ -4,13 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <fstream>
-// Mantenimiento: Se incluyen librerías que no se utilizan
-#include <sstream>
-#include <list>
-#include <algorithm>
 #include "ProgramaAcademico.h"
-#include "Consolidado.h"
 #include "GestorBase.h"
 
 // Recomendación Linter: Se debe evitar el uso de using namespace en archivos de cabecera
@@ -20,12 +14,12 @@ class GestorCsv : public GestorBase
 {
 public:
     GestorCsv() = default;
-    void crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos) override;
-    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir) override;
+    void crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador) override;
+    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador) override;
 
-    vector<int> leerProgramasCsv(string &ruta);
-    void leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar);
-    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
+    vector<int> leerProgramasCsv(string &ruta, const char &delimitador);
+    void leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar, const char &delimitador);
+    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo, const char &delimitador);
     int conseguirCantColumnas(map<string, int>);
     string quitarEspacioYAgregarMayus(string cadena);
 };

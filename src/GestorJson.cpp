@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
+void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
     vector<string> etiquetasColumnas;   // Está vacío. Se puso solo para que el código no muera.
     // FIXME: ARREGLAR PARA QUE FUNCIONE CON EL MAPA DE CONSOLIDADOS. VER EJEMPLO DE GestorCsv
@@ -90,7 +90,7 @@ void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
     archivoResultados.close();
 }
 
-bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "extras.csv";
@@ -104,7 +104,7 @@ bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAIm
                 archivoExtra << datosAImprimir[i][j];
                 if (j != (datosAImprimir[i].size() - 1))
                 {
-                    archivoExtra << ";";
+                    archivoExtra << delimitador;
                 }
             }
             archivoExtra << endl;

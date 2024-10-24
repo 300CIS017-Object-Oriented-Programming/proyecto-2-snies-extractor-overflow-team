@@ -3,13 +3,12 @@
 //
 
 #include "GestorTxt.h"
-#include "GestorCsv.h"
 #include <iostream>
 #include <fstream>
 
 using namespace std;
 
-void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
+void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
     vector<string> etiquetasColumnas;   // Está vacío. Se puso solo para que el código no muera.
     // FIXME: ARREGLAR PARA QUE FUNCIONE CON EL MAPA DE CONSOLIDADOS. VER EJEMPLO DE GestorCsv
@@ -83,7 +82,7 @@ void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
 
 }
 
-bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "extras.txt";
@@ -98,7 +97,7 @@ bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
                 archivoExtra << datosAImprimir[i][j];
                 if (j != (datosAImprimir[i].size() - 1))
                 {
-                    archivoExtra << " "; // Separador entre columnas
+                    archivoExtra << delimitador; // Separador entre columnas
                 }
             }
             archivoExtra << endl;

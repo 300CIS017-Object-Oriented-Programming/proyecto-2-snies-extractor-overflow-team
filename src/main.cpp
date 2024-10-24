@@ -10,6 +10,6 @@ int main()
         menu.mostrarDatosExtra();
         menu.buscarPorPalabraClaveYFormacion();
     }
-    menu.salir();
+    menu.cerrarPrograma();
     return 0;
 }

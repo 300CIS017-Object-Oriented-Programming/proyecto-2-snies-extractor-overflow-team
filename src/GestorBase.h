@@ -8,7 +8,6 @@
 #include "ProgramaAcademico.h"
 #include <vector>
 #include <map>
-#include <list>
 #include <string>
 
 using namespace std;
@@ -17,8 +16,8 @@ class GestorBase
 {
 public:
     virtual  ~GestorBase() = default;
-    virtual void crearArchivo(string&, map<int, ProgramaAcademico*>&) = 0;
-    virtual bool crearArchivoExtra(string&, vector<vector<string>>) = 0;
+    virtual void crearArchivo(string&, map<int, ProgramaAcademico*>&, const char &delimitador) = 0;
+    virtual bool crearArchivoExtra(string&, vector<vector<string>>, const char &delimitador) = 0;
 };
 
 #endif //GESTORBASE_H

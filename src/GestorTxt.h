@@ -10,15 +10,14 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <list>
 
 using namespace std;
 
 class GestorTxt : public GestorBase
 {
 public:
-    void crearArchivo(string&, map<int, ProgramaAcademico*>&) override;
-    bool crearArchivoExtra(string&, vector<vector<string>>) override;
+    void crearArchivo(string&, map<int, ProgramaAcademico*>&, const char &delimitador) override;
+    bool crearArchivoExtra(string&, vector<vector<string>>, const char &delimitador) override;
 };
 
 #endif //GESTORTXT_H

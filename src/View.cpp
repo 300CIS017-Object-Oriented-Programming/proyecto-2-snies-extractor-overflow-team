@@ -1,25 +1,14 @@
 #include "View.h"
+#include "Settings.h"
+#include <algorithm>
 
 // Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
 // archivo de configuración
-View::View()
-{
-    // NEW quitar estas variables de aquí y del constructor del SNIESController
-    //  estas constantes las leerá el SNIESController del archivo de Settings.h
-    //  Completar el archivo con el resto de constantes necesarias
-    controlador = SNIESController();
-}
-
-// Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
-//  del View sea por defecto y el de controlador se llame automáticamente al salir del programa
-View::~View()
-{
-    controlador.~SNIESController();
-}
 
 
 bool View::mostrarPantallaBienvenido()
 {
+    const char delimitador = Settings::DELIMITADOR;
     // Mantenimiento: Nombre confuso de la variable, cambiar a algo más descriptivo
     bool parametrizacionBool = false;
 
@@ -44,7 +33,6 @@ bool View::mostrarPantallaBienvenido()
         // y quitar las variables que no se usan
         string anio1("abc");
         string ano2("abc");
-        string anoAux;
         int i = 0;
         bool anosValido = false;
         // FIXME pasar la lógica del bucle a un método reutlizable
@@ -87,24 +75,21 @@ bool View::mostrarPantallaBienvenido()
 
         // Organizo los años
         // FIXME: Crear un método para hacer que el segundo año sea siempre
-        // mayor que el primer año
-        // Mantenimiento: Simplificar el código, implementar o usar funciones auxiliares como swap
+        //mayor que el primer año
         if (stoi(ano2) < stoi(anio1))
         {
-            anoAux = anio1;
-            anio1 = ano2;
-            ano2 = anoAux;
+            std::swap(anio1, ano2);
         }
 
         cout << "Procesando datos ..." << endl;
-        controlador.procesarDatosCsv(anio1, ano2);
+        controlador.procesarDatosCsv(anio1, ano2, delimitador);
         cout << "Datos procesados con exito!" << endl;
     }
     return parametrizacionBool;
 }
 
 // Mantenimiento: Mejorar el nombre del metodo, es posible hacerlo más claro.
-void View::salir()
+void View::cerrarPrograma()
 {
     cout << "Cerrando programa..." << endl;
     cout << "Recuerde revisar la carpeta de outputs para los archivos .csv exportados" << endl;
@@ -142,6 +127,7 @@ void View::buscarPorPalabraClaveYFormacion()
 {
     // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
     // mismo nombre, la estructura es confusa.
+    const char delimitador = Settings::DELIMITADOR;
     char opcionYN = 'y', opcionCSV;
     string palabraClave;
     bool convertirCSV;
@@ -189,7 +175,7 @@ void View::buscarPorPalabraClaveYFormacion()
                 convertirCSV = false;
             }
 
-            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
+            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica, delimitador);
         }
     }
 }

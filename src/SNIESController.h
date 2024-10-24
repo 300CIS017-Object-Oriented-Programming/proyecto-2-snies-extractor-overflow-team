@@ -1,13 +1,9 @@
 #ifndef SNIES_CONTROLLER_H
 #define SNIES_CONTROLLER_H
-#include <iostream>
 #include <vector>
 #include <map>
 #include <string>
-#include <algorithm>
-#include <list>
 #include "ProgramaAcademico.h"
-#include "Consolidado.h"
 #include "GestorCsv.h"
 #include "GestorTxt.h"
 #include "GestorJson.h"
@@ -33,11 +29,10 @@ private:
 
 public:
     SNIESController();
-    SNIESController(string &, string &, string &, string &, string &, string &, string &);
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
+    void procesarDatosCsv(string &, string &, const char &);
     void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+    void buscarProgramas(bool, string &, int, const char &);
     string exportarEnFormato();
 };
 
