@@ -55,6 +55,7 @@ class ProgramaAcademico
 
 public:
     ProgramaAcademico() = default;
+    ~ProgramaAcademico();
 
     void setCodigoDeLaInstitucion(int);
     int getCodigoDeLaInstitucion();
@@ -164,8 +165,6 @@ public:
     void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
     void setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones);
 
-
-    ~ProgramaAcademico();
 };
 
 #endif

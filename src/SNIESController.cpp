@@ -69,25 +69,19 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
         gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos");
     }
 
-    string opcionArchivoAExportar;
-    cout << "A que tipo de archivo quiere exportar el archivo?: " << endl;
-    cout << "1. Csv \n2. Txt \n3. Json: " << endl;
-    cin >> opcionArchivoAExportar;
+    string formatoAExportar = exportarEnFormato();
 
-    while (opcionArchivoAExportar != "1" && opcionArchivoAExportar != "2" && opcionArchivoAExportar != "3") {
-        cout << "Seleccione una opcion valida: " << endl;
-        cin >> opcionArchivoAExportar;
-    }
-    if (opcionArchivoAExportar == "1") {
+    if (formatoAExportar == "1")
+    {
         gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos);
-
     }
-    else if (opcionArchivoAExportar == "2") {
+    else if (formatoAExportar == "2")
+    {
         GestorTxt *gestorTxtObj = new GestorTxt();
         gestorTxtObj->crearArchivo(rutaOutputResultados, programasAcademicos);
-
     }
-    else if (opcionArchivoAExportar == "3"){
+    else if (formatoAExportar == "3")
+    {
         GestorJson * gestorJsonObj = new GestorJson();
         gestorJsonObj->crearArchivo(rutaOutputResultados, programasAcademicos);
     }
@@ -116,7 +110,22 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
 
     if (flag)
     {
-        gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+        string formatoAExportar = exportarEnFormato();
+
+        if (formatoAExportar == "1")
+        {
+            gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+        }
+        else if (formatoAExportar == "2")
+        {
+            GestorTxt *gestorTxtObj = new GestorTxt();
+            gestorTxtObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+        }
+        else if (formatoAExportar == "3")
+        {
+            GestorJson * gestorJsonObj = new GestorJson();
+            gestorJsonObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+        }
     }
 }
 
@@ -257,4 +266,17 @@ void SNIESController::calcularDatosExtra(bool flag)
         creado = gestorCsvObj->crearArchivoExtra(rutaOutput, matrizFinal);
     }
     */
+}
+
+string SNIESController::exportarEnFormato() {
+    string opcionArchivoAExportar;
+    cout << "A que tipo de archivo quiere exportar el archivo?: " << endl;
+    cout << "1. Csv \n2. Txt \n3. Json: " << endl;
+    cin >> opcionArchivoAExportar;
+
+    while (opcionArchivoAExportar != "1" && opcionArchivoAExportar != "2" && opcionArchivoAExportar != "3") {
+        cout << "Seleccione una opcion valida: " << endl;
+        cin >> opcionArchivoAExportar;
+    }
+    return  opcionArchivoAExportar;
 }

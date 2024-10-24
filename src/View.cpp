@@ -158,20 +158,6 @@ void View::buscarPorPalabraClaveYFormacion()
         // Alta complejidad ciclomática, refactorizar
         if (opcionYN == 'y')
         {
-            cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
-            cin >> opcionCSV;
-            cout << "\n";
-            opcionCSV = tolower(opcionCSV);
-
-            if (opcionCSV == 'y')
-            {
-                convertirCSV = true;
-            }
-
-            else
-            {
-                convertirCSV = false;
-            }
             // Coesión y Organización: Baja coesión, este metodo hace cosas que no debería,
             // separar en métodos más pequeños
             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
@@ -186,6 +172,21 @@ void View::buscarPorPalabraClaveYFormacion()
                 cout << "Seleccione una opcion entre 1-10 excluyendo el 9\n"
                      << endl;
                 cin >> idFormacionAcademica;
+            }
+
+            cout << "Deseas exportar los datos del programa academico en un archivo?(Y/N): " << endl;
+            cin >> opcionCSV;
+            cout << "\n";
+            opcionCSV = tolower(opcionCSV);
+
+            if (opcionCSV == 'y')
+            {
+                convertirCSV = true;
+            }
+
+            else
+            {
+                convertirCSV = false;
             }
 
             controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
