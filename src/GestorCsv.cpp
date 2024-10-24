@@ -164,7 +164,6 @@ void GestorCsv::leerArchivoFinal(string &rutaBase, string &ano, map<int, Program
 
 void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, vector<string> etiquetasColumnas)
 {
-    // Este bool nos ayudará a saber si se creo exitosamente el archivo
     string rutaCompleta = ruta + "resultados.csv";
     ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
@@ -296,8 +295,6 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
 
 bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &programasBuscados, vector<string> etiquetasColumnas)
 {
-    // Este bool nos ayudará a saber si se creo exitosamente el archivo
-    bool estadoCreacion = false;
     string rutaCompleta = ruta + "buscados.csv";
     ofstream archivoBuscados(rutaCompleta);
     if (archivoBuscados.is_open())
@@ -314,6 +311,7 @@ bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &pr
         // Leemos todos los programas de la lista de los programas buscados para imprimirlos
         for (it = programasBuscados.begin(); it != programasBuscados.end(); it++)
         {
+
             // Imprimimos los 8 consolidados del programa
             for (int i = 0; i < 8; i++)
             {
@@ -369,14 +367,10 @@ bool GestorCsv::crearArchivoBuscados(string &ruta, list<ProgramaAcademico *> &pr
             }
         }
 
-        // Cambiamos el valor del booleano si logramos llegar hasta este punto
-        estadoCreacion = true;
         // Imprimimos ruta donde quedo el archivo
         cout << "Archivo Creado en: " << rutaCompleta << endl;
     }
-
     archivoBuscados.close();
-    return estadoCreacion;
 }
 
 bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
@@ -420,7 +414,7 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
 
 
     ifstream archivo(rutaArchivo);
-    // TODO: manejar la excepción. Throw a dónde? Al SNIESController?
+    // FIXME: manejar la excepción. Throw a dónde? Al SNIESController?
     if (!(archivo.is_open()))
     {
         cout << "Archivo " << rutaArchivo << " no se pudo abrir correctamente" << endl;

@@ -52,11 +52,9 @@ class ProgramaAcademico
     string municipioDeOfertaDelPrograma;
 
     map<int, map<int, map<int, Consolidado *>>> mapConsolidados;
-    // TODO: borrar linea de vector de consolidados
-    vector<Consolidado *> consolidados;
 
 public:
-    ProgramaAcademico();
+    ProgramaAcademico() = default;
 
     void setCodigoDeLaInstitucion(int);
     int getCodigoDeLaInstitucion();
@@ -159,15 +157,11 @@ public:
     void setMunicipioDeOfertaDelPrograma(string &);
     string getMunicipioDeOfertaDelPrograma();
 
-    void setConsolidado(Consolidado *, int);
-    Consolidado *getConsolidado(int);
 
     Consolidado * getConsolidadoDeMapa(int anio, int idSexo, int semestre);
     map<int, map<int, map<int, Consolidado *>>> getMapaDeConsolidados();
 
     void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
-
-
     void setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones);
 
 

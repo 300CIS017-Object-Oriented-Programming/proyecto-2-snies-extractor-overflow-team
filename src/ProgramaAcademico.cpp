@@ -2,10 +2,6 @@
 
 using namespace std;
 
-ProgramaAcademico::ProgramaAcademico()
-{
-    consolidados = vector<Consolidado *>(8);
-}
 
 void ProgramaAcademico::setCodigoDeLaInstitucion(int nuevoCodigoDeLaInstitucion)
 {
@@ -334,16 +330,6 @@ string ProgramaAcademico::getMunicipioDeOfertaDelPrograma()
     return municipioDeOfertaDelPrograma;
 }
 
-void ProgramaAcademico::setConsolidado(Consolidado *nuevoConsolidado, int pos)
-{
-    consolidados[pos] = nuevoConsolidado;
-}
-
-Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado)
-{
-    return consolidados[posicionConsolidado];
-}
-
 void ProgramaAcademico::setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado)
 {
     mapConsolidados[anio][idSexo][semestre] = consolidado;
@@ -416,10 +402,7 @@ void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo,
 
 ProgramaAcademico::~ProgramaAcademico()
 {
-    for (Consolidado *consolidado : consolidados)
-    {
-        delete consolidado;
-    }
+
 }
 
 
