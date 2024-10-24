@@ -11,7 +11,7 @@ SNIESController::SNIESController()
     rutaProgramasCSV = "C:/SNIES_EXTRACTOR/inputs/programas.csv";
     rutaAdmitidos = "C:/SNIES_EXTRACTOR/inputs/admitidos";
     rutaGraduados = "C:/SNIES_EXTRACTOR/inputs/graduados";
-    ruq taInscritos = "C:/SNIES_EXTRACTOR/inputs/inscritos";
+    rutaInscritos = "C:/SNIES_EXTRACTOR/inputs/inscritos";
     rutaMatriculados = "C:/SNIES_EXTRACTOR/inputs/matriculados";
     rutaMatriculadosPrimerSemestre = "C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre";
     rutaOutputResultados = "C:/SNIES_EXTRACTOR/outputs/resultados.csv";
