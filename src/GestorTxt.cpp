@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
+void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
     ofstream archivoResultados(ruta);
     if (archivoResultados.is_open())
@@ -126,7 +126,7 @@ void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
     archivoResultados.close();
 }
 
-bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorTxt::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)
 {
     bool estadoCreacion = false;
     string rutaCompleta = ruta + "extras.txt";

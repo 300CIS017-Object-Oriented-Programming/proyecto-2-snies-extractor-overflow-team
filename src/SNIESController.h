@@ -34,9 +34,9 @@ public:
     string rutaOutputFiltrado;
     SNIESController();
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
-    void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+    void procesarDatosCsv(string &, string &, const char &);
+    void calcularDatosExtra(bool, const char &);
+    void buscarProgramas(bool, string &, int, const char &);
     string exportarEnFormato();
 };
 

@@ -20,12 +20,12 @@ class GestorCsv : public GestorBase
 {
 public:
     GestorCsv() = default;
-    void crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos) override;
-    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir) override;
-
-    vector<int> leerProgramasCsv(string &ruta);
-    void leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar);
-    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo);
+    void crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &) override ;
+    bool crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &) override;
+    vector<int> leerProgramasCsv(string &ruta,const char &);
+    void leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *> &mapaProgramasAcademicos, bool primeraVez, string
+                     atributoAModificar, const char &);
+    map<string, int> conseguirPosicionesColumnas(string &rutaArchivo, const char &);
     int conseguirCantColumnas(map<string, int>);
     string quitarEspacioYAgregarMayus(string cadena);
 };

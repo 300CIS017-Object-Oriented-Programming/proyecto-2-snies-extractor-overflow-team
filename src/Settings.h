@@ -33,7 +33,7 @@ public:
     static const std::string RESULTADO_FILE_PATH;
     static const std::string FILTRADO_FILE_PATH;
     static const std::string BASE_PATH;
-    static const std::string DELIMITADOR;
+    static const char DELIMITADOR;
 
     // FIXME completar para el resto de constantes
 };
@@ -49,6 +49,6 @@ const std::string Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH = BASE_PATH +
 const std::string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "/inputs/graduados";
 const std::string Settings::RESULTADO_FILE_PATH = BASE_PATH + "/outputs/resultados.csv";
 const std::string Settings::FILTRADO_FILE_PATH = BASE_PATH + "/outputs/ArchivoFiltrado";
-const std::string Settings::DELIMITADOR = ";";
+const char Settings::DELIMITADOR = ';';
 
 #endif // SETTINGS_H

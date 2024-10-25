@@ -13,19 +13,11 @@ View::View()
     controlador.rutaMatriculadosPrimerSemestre = Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH;
     controlador.rutaOutputResultados = Settings::RESULTADO_FILE_PATH;
     controlador.rutaOutputFiltrado = Settings::FILTRADO_FILE_PATH;
-    delimitador = Settings::DELIMITADOR;
-}
-void View::setDelimitador(const char &delimitador)
-{
-    this->delimitador = delimitador;
-}
 
-char View::getDelimitador() const {
-    return delimitador;
 }
-
 bool View::mostrarPantallaBienvenido()
 {
+    const char delimitador = Settings::DELIMITADOR;
     // Mantenimiento: Nombre confuso de la variable, cambiar a algo más descriptivo
     bool parametrizacionBool = false;
 
@@ -50,7 +42,6 @@ bool View::mostrarPantallaBienvenido()
         // y quitar las variables que no se usan
         string anio1("abc");
         string ano2("abc");
-        string anoAux;
         int i = 0;
         bool anosValido = false;
         // FIXME pasar la lógica del bucle a un método reutlizable
@@ -97,13 +88,11 @@ bool View::mostrarPantallaBienvenido()
         // Mantenimiento: Simplificar el código, implementar o usar funciones auxiliares como swap
         if (stoi(ano2) < stoi(anio1))
         {
-            anoAux = anio1;
-            anio1 = ano2;
-            ano2 = anoAux;
+            swap(anio1,ano2);
         }
 
         cout << "Procesando datos ..." << endl;
-        controlador.procesarDatosCsv(anio1, ano2);
+        controlador.procesarDatosCsv(anio1, ano2, delimitador);
         cout << "Datos procesados con exito!" << endl;
     }
     return parametrizacionBool;
@@ -148,6 +137,7 @@ void View::buscarPorPalabraClaveYFormacion()
 {
     // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
     // mismo nombre, la estructura es confusa.
+    const char delimitador = Settings::DELIMITADOR;
     char opcionYN = 'y', opcionCSV;
     string palabraClave;
     bool convertirCSV;
@@ -195,7 +185,7 @@ void View::buscarPorPalabraClaveYFormacion()
                 convertirCSV = false;
             }
 
-            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
+            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica, delimitador);
         }
     }
 }

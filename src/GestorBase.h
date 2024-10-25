@@ -11,14 +11,16 @@
 #include <list>
 #include <string>
 
+#include "View.h"
+
 using namespace std;
 
 class GestorBase
 {
 public:
     virtual  ~GestorBase() = default;
-    virtual void crearArchivo(string&, map<int, ProgramaAcademico*>&) = 0;
-    virtual bool crearArchivoExtra(string&, vector<vector<string>>) = 0;
+    virtual void crearArchivo(string&, map<int, ProgramaAcademico*>&, const char &) = 0;
+    virtual bool crearArchivoExtra(string&, vector<vector<string>>, const char &) = 0;
 };
 
 #endif //GESTORBASE_H
