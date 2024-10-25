@@ -18,8 +18,8 @@ using json = nlohmann::json;
 class GestorJson : public GestorBase
 {
 public:
-    void crearArchivo(string&, map<int, ProgramaAcademico*>&) override;
-    bool crearArchivoExtra(string&, vector<vector<string>>) override;
+    void crearArchivo(string&, map<int, ProgramaAcademico*>&, const char &) override;
+    bool crearArchivoExtra(string&, vector<vector<string>>, const char &) override;
 };
 
 #endif //GESTORJSON_H

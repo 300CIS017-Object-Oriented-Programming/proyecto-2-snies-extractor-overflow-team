@@ -1,6 +1,6 @@
 #include "GestorCsv.h"
 
-vector<int> GestorCsv::leerProgramasCsv(string &ruta)
+vector<int> GestorCsv::leerProgramasCsv(string &ruta, const char &delimitador)
 {
     vector<int> codigosSniesRetorno;
     ifstream archivoProgramasCsv(ruta);
@@ -19,7 +19,7 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
         while (getline(archivoProgramasCsv, linea))
         {
             stringstream streamLinea(linea);
-            getline(streamLinea, dato, ';');
+            getline(streamLinea, dato, delimitador);
             // Manteniemiento: Se puede mejorar la forma de leer los datos de la línea y
             // los nombres de los métodos y variables.
             codigosSniesRetorno.push_back(stoi(dato));
@@ -29,12 +29,12 @@ vector<int> GestorCsv::leerProgramasCsv(string &ruta)
     return codigosSniesRetorno;
 }
 
-void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *>  &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar)
+void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcademico *> &mapaProgramasAcademicos, bool primeraVez, string atributoAModificar, const char &delimitador)
 {
     vector<vector<string>> matrizResultado;
     string rutaCompleta = rutaBase + ano + ".csv";
 
-    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta);
+    map <string, int> posicionesColumnasMap = conseguirPosicionesColumnas(rutaCompleta, delimitador);
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
     int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
     int POS_SEXO = posicionesColumnasMap["SEXO"];
@@ -71,7 +71,7 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
             // vectorFila = vector<string>(TAMANIO_ARCHIVO);
             streamFila = stringstream(fila);
             columna = 0;
-            while ((getline(streamFila, dato, ';')))
+            while ((getline(streamFila, dato, delimitador)))
             {
 
                 vectorFila[columna] = dato;
@@ -87,7 +87,7 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
         {
             streamFila = stringstream(fila);
             columna = 0;
-            while ((getline(streamFila, dato, ';')) && (columna <= POS_COD_SNIES))
+            while ((getline(streamFila, dato, delimitador)) && (columna <= POS_COD_SNIES))
             {
                 vectorFila[columna] = dato;
                 columna++;
@@ -110,7 +110,7 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
                 // Termino de leer y guardar primera fila
                 vectorFila[columna] = dato; // Guardamos el dato que habiamos geteado justo antes de hacer la verificacion
                 columna++;
-                while ((getline(streamFila, dato, ';')))
+                while ((getline(streamFila, dato, delimitador)))
                 {
                     vectorFila[columna] = dato;
                     columna++;
@@ -160,56 +160,55 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
     archivo.close();
 }
 
-void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
+void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos,const char &delimitador)
 {
-    string DELIMITADOR = ";";
     ofstream archivoResultados(ruta);
     if (archivoResultados.is_open())
     {
         // Imprimimos en el archivo las etiquetas (Primera fila)
         archivoResultados << "\xEF\xBB\xBF";    // Permite escribir los caracteres con tildes correctamente
-        archivoResultados << "CÓDIGO DE LA INSTITUCIÓN" << DELIMITADOR;
-        archivoResultados << "IES_PADRE" << DELIMITADOR;
-        archivoResultados << "INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)" << DELIMITADOR;
-        archivoResultados << "PRINCIPAL O SECCIONAL" << DELIMITADOR;
-        archivoResultados << "ID SECTOR IES" << DELIMITADOR;
-        archivoResultados << "SECTOR IES" << DELIMITADOR;
-        archivoResultados << "ID CARACTER" << DELIMITADOR;
-        archivoResultados << "CARACTER IES" << DELIMITADOR;
-        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (IES)" << DELIMITADOR;
-        archivoResultados << "DEPARTAMENTO DE DOMICILIO DE LA IES" << DELIMITADOR;
-        archivoResultados << "CÓDIGO DEL MUNICIPIO IES" << DELIMITADOR;
-        archivoResultados << "MUNICIPIO DE DOMICILIO DE LA IES" << DELIMITADOR;
-        archivoResultados << "CÓDIGO SNIES DEL PROGRAMA" << DELIMITADOR;
-        archivoResultados << "PROGRAMA ACADÉMICO" << DELIMITADOR;
-        archivoResultados << "ID NIVEL ACADÉMICO" << DELIMITADOR;
-        archivoResultados << "NIVEL ACADÉMICO" << DELIMITADOR;
-        archivoResultados << "ID NIVEL DE FORMACIÓN" << DELIMITADOR;
-        archivoResultados << "NIVEL DE FORMACIÓN" << DELIMITADOR;
-        archivoResultados << "ID METODOLOGÍA" << DELIMITADOR;
-        archivoResultados <<"METODOLOGÍA" << DELIMITADOR;
-        archivoResultados << "ID ÁREA" << DELIMITADOR;
-        archivoResultados << "ÁREA DE CONOCIMIENTO" << DELIMITADOR;
-        archivoResultados << "ID NÚCLEO" << DELIMITADOR;
-        archivoResultados << "NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)" << DELIMITADOR;
-        archivoResultados << "ID CINE CAMPO AMPLIO" << DELIMITADOR;
-        archivoResultados << "DESC CINE CAMPO AMPLIO" << DELIMITADOR;
-        archivoResultados << "ID CINE CAMPO ESPECIFICO" << DELIMITADOR;
-        archivoResultados << "DESC CINE CAMPO ESPECIFICO" << DELIMITADOR;
-        archivoResultados << "ID CINE CODIGO DETALLADO" << DELIMITADOR;
-        archivoResultados << "DESC CINE CODIGO DETALLADO" << DELIMITADOR;
-        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (PROGRAMA)" << DELIMITADOR;
-        archivoResultados << "DEPARTAMENTO DE OFERTA DEL PROGRAMA" << DELIMITADOR;
-        archivoResultados << "CÓDIGO DEL MUNICIPIO (PROGRAMA)" << DELIMITADOR;
-        archivoResultados << "MUNICIPIO DE OFERTA DEL PROGRAMA" << DELIMITADOR;
-        archivoResultados << "ID SEXO" << DELIMITADOR;
-        archivoResultados << "SEXO" << DELIMITADOR;
-        archivoResultados << "AÑO" << DELIMITADOR;
-        archivoResultados << "SEMESTRE" << DELIMITADOR;
-        archivoResultados << "ADMITIDOS" << DELIMITADOR;
-        archivoResultados << "GRADUADOS" << DELIMITADOR;
-        archivoResultados << "INSCRITOS" << DELIMITADOR;
-        archivoResultados << "MATRICULADOS" << DELIMITADOR;
+        archivoResultados << "CÓDIGO DE LA INSTITUCIÓN" << delimitador;
+        archivoResultados << "IES_PADRE" << delimitador;
+        archivoResultados << "INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)" << delimitador;
+        archivoResultados << "PRINCIPAL O SECCIONAL" << delimitador;
+        archivoResultados << "ID SECTOR IES" << delimitador;
+        archivoResultados << "SECTOR IES" << delimitador;
+        archivoResultados << "ID CARACTER" << delimitador;
+        archivoResultados << "CARACTER IES" << delimitador;
+        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (IES)" << delimitador;
+        archivoResultados << "DEPARTAMENTO DE DOMICILIO DE LA IES" << delimitador;
+        archivoResultados << "CÓDIGO DEL MUNICIPIO IES" << delimitador;
+        archivoResultados << "MUNICIPIO DE DOMICILIO DE LA IES" << delimitador;
+        archivoResultados << "CÓDIGO SNIES DEL PROGRAMA" << delimitador;
+        archivoResultados << "PROGRAMA ACADÉMICO" << delimitador;
+        archivoResultados << "ID NIVEL ACADÉMICO" << delimitador;
+        archivoResultados << "NIVEL ACADÉMICO" << delimitador;
+        archivoResultados << "ID NIVEL DE FORMACIÓN" << delimitador;
+        archivoResultados << "NIVEL DE FORMACIÓN" << delimitador;
+        archivoResultados << "ID METODOLOGÍA" << delimitador;
+        archivoResultados <<"METODOLOGÍA" << delimitador;
+        archivoResultados << "ID ÁREA" << delimitador;
+        archivoResultados << "ÁREA DE CONOCIMIENTO" << delimitador;
+        archivoResultados << "ID NÚCLEO" << delimitador;
+        archivoResultados << "NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)" << delimitador;
+        archivoResultados << "ID CINE CAMPO AMPLIO" << delimitador;
+        archivoResultados << "DESC CINE CAMPO AMPLIO" << delimitador;
+        archivoResultados << "ID CINE CAMPO ESPECIFICO" << delimitador;
+        archivoResultados << "DESC CINE CAMPO ESPECIFICO" << delimitador;
+        archivoResultados << "ID CINE CODIGO DETALLADO" << delimitador;
+        archivoResultados << "DESC CINE CODIGO DETALLADO" << delimitador;
+        archivoResultados << "CÓDIGO DEL DEPARTAMENTO (PROGRAMA)" << delimitador;
+        archivoResultados << "DEPARTAMENTO DE OFERTA DEL PROGRAMA" << delimitador;
+        archivoResultados << "CÓDIGO DEL MUNICIPIO (PROGRAMA)" << delimitador;
+        archivoResultados << "MUNICIPIO DE OFERTA DEL PROGRAMA" << delimitador;
+        archivoResultados << "ID SEXO" << delimitador;
+        archivoResultados << "SEXO" << delimitador;
+        archivoResultados << "AÑO" << delimitador;
+        archivoResultados << "SEMESTRE" << delimitador;
+        archivoResultados << "ADMITIDOS" << delimitador;
+        archivoResultados << "GRADUADOS" << delimitador;
+        archivoResultados << "INSCRITOS" << delimitador;
+        archivoResultados << "MATRICULADOS" << delimitador;
         archivoResultados << "NEOS" << endl;
 
         for (const auto &entryPrograma : mapadeProgramasAcademicos)
@@ -226,50 +225,50 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
                         int semestre = entrySemestre.first;
                         Consolidado * consolidadoActual = entrySemestre.second;
                         // Imprimimos toda la información base del programa academico
-                        archivoResultados << programaActual->getCodigoDeLaInstitucion() << ";";
-                        archivoResultados << programaActual->getIesPadre() << ";";
-                        archivoResultados << programaActual->getInstitucionDeEducacionSuperiorIes() << ";";
-                        archivoResultados << programaActual->getPrincipalOSeccional() << ";";
-                        archivoResultados << programaActual->getIdSectorIes() << ";";
-                        archivoResultados << programaActual->getSectorIes() << ";";
-                        archivoResultados << programaActual->getIdCaracter() << ";";
-                        archivoResultados << programaActual->getCaracterIes() << ";";
-                        archivoResultados << programaActual->getCodigoDelDepartamentoIes() << ";";
-                        archivoResultados << programaActual->getDepartamentoDeDomicilioDeLaIes() << ";";
-                        archivoResultados << programaActual->getCodigoDelMunicipioIes() << ";";
-                        archivoResultados << programaActual->getMunicipioDeDomicilioDeLaIes() << ";";
-                        archivoResultados << programaActual->getCodigoSniesDelPrograma() << ";";
-                        archivoResultados << programaActual->getProgramaAcademico() << ";";
-                        archivoResultados << programaActual->getIdNivelAcademico() << ";";
-                        archivoResultados << programaActual->getNivelAcademico() << ";";
-                        archivoResultados << programaActual->getIdNivelDeFormacion() << ";";
-                        archivoResultados << programaActual->getNivelDeFormacion() << ";";
-                        archivoResultados << programaActual->getIdMetodologia() << ";";
-                        archivoResultados << programaActual->getMetodologia() << ";";
-                        archivoResultados << programaActual->getIdArea() << ";";
-                        archivoResultados << programaActual->getAreaDeConocimiento() << ";";
-                        archivoResultados << programaActual->getIdNucleo() << ";";
-                        archivoResultados << programaActual->getNucleoBasicoDelConocimientoNbc() << ";";
-                        archivoResultados << programaActual->getIdCineCampoAmplio() << ";";
-                        archivoResultados << programaActual->getDescCineCampoAmplio() << ";";
-                        archivoResultados << programaActual->getIdCineCampoEspecifico() << ";";
-                        archivoResultados << programaActual->getDescCineCampoEspecifico() << ";";
-                        archivoResultados << programaActual->getIdCineCodigoDetallado() << ";";
-                        archivoResultados << programaActual->getDescCineCodigoDetallado() << ";";
-                        archivoResultados << programaActual->getCodigoDelDepartamentoPrograma() << ";";
-                        archivoResultados << programaActual->getDepartamentoDeOfertaDelPrograma() << ";";
-                        archivoResultados << programaActual->getCodigoDelMunicipioPrograma() << ";";
-                        archivoResultados << programaActual->getMunicipioDeOfertaDelPrograma() << ";";
+                        archivoResultados << programaActual->getCodigoDeLaInstitucion() << delimitador;
+                        archivoResultados << programaActual->getIesPadre() << delimitador;
+                        archivoResultados << programaActual->getInstitucionDeEducacionSuperiorIes() << delimitador;
+                        archivoResultados << programaActual->getPrincipalOSeccional() << delimitador;
+                        archivoResultados << programaActual->getIdSectorIes() << delimitador;
+                        archivoResultados << programaActual->getSectorIes() << delimitador;
+                        archivoResultados << programaActual->getIdCaracter() << delimitador;
+                        archivoResultados << programaActual->getCaracterIes() << delimitador;
+                        archivoResultados << programaActual->getCodigoDelDepartamentoIes() << delimitador;
+                        archivoResultados << programaActual->getDepartamentoDeDomicilioDeLaIes() << delimitador;
+                        archivoResultados << programaActual->getCodigoDelMunicipioIes() << delimitador;
+                        archivoResultados << programaActual->getMunicipioDeDomicilioDeLaIes() << delimitador;
+                        archivoResultados << programaActual->getCodigoSniesDelPrograma() << delimitador;
+                        archivoResultados << programaActual->getProgramaAcademico() << delimitador;
+                        archivoResultados << programaActual->getIdNivelAcademico() << delimitador;
+                        archivoResultados << programaActual->getNivelAcademico() << delimitador;
+                        archivoResultados << programaActual->getIdNivelDeFormacion() << delimitador;
+                        archivoResultados << programaActual->getNivelDeFormacion() << delimitador;
+                        archivoResultados << programaActual->getIdMetodologia() << delimitador;
+                        archivoResultados << programaActual->getMetodologia() << delimitador;
+                        archivoResultados << programaActual->getIdArea() << delimitador;
+                        archivoResultados << programaActual->getAreaDeConocimiento() << delimitador;
+                        archivoResultados << programaActual->getIdNucleo() << delimitador;
+                        archivoResultados << programaActual->getNucleoBasicoDelConocimientoNbc() << delimitador;
+                        archivoResultados << programaActual->getIdCineCampoAmplio() << delimitador;
+                        archivoResultados << programaActual->getDescCineCampoAmplio() << delimitador;
+                        archivoResultados << programaActual->getIdCineCampoEspecifico() << delimitador;
+                        archivoResultados << programaActual->getDescCineCampoEspecifico() << delimitador;
+                        archivoResultados << programaActual->getIdCineCodigoDetallado() << delimitador;
+                        archivoResultados << programaActual->getDescCineCodigoDetallado() << delimitador;
+                        archivoResultados << programaActual->getCodigoDelDepartamentoPrograma() << delimitador;
+                        archivoResultados << programaActual->getDepartamentoDeOfertaDelPrograma() << delimitador;
+                        archivoResultados << programaActual->getCodigoDelMunicipioPrograma() << delimitador;
+                        archivoResultados << programaActual->getMunicipioDeOfertaDelPrograma() << delimitador;
 
                         // Imprimimos la información del consolidado: (ID SEXO;SEXO;AÑO;SEMESTRE;ADMITIDOS;GRADUADOS;INSCRITOS;MATRICULADOS;NEOS)
-                        archivoResultados << consolidadoActual->getIdSexo() << ";";
-                        archivoResultados << consolidadoActual->getSexo() << ";";
-                        archivoResultados << consolidadoActual->getAno() << ";";
-                        archivoResultados << consolidadoActual->getSemestre() << ";";
-                        archivoResultados << consolidadoActual->getAdmitidos() << ";";
-                        archivoResultados << consolidadoActual->getGraduados() << ";";
-                        archivoResultados << consolidadoActual->getInscritos() << ";";
-                        archivoResultados << consolidadoActual->getMatriculados() << ";";
+                        archivoResultados << consolidadoActual->getIdSexo() << delimitador;
+                        archivoResultados << consolidadoActual->getSexo() << delimitador;
+                        archivoResultados << consolidadoActual->getAno() << delimitador;
+                        archivoResultados << consolidadoActual->getSemestre() << delimitador;
+                        archivoResultados << consolidadoActual->getAdmitidos() << delimitador;
+                        archivoResultados << consolidadoActual->getGraduados() << delimitador;
+                        archivoResultados << consolidadoActual->getInscritos() << delimitador;
+                        archivoResultados << consolidadoActual->getMatriculados() << delimitador;
                         archivoResultados << consolidadoActual->getMatriculadosPrimerSemestre();
                         // Saltamos de linea para la siguiente fila
                         archivoResultados << endl;
@@ -286,7 +285,7 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
     archivoResultados.close();
 }
 
-bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)
 {
     // Este bool nos ayudará a saber si se creo el archivo exitosamente
     bool estadoCreacion = false;
@@ -300,11 +299,11 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
             // Imprimimos cada fila
             for (int j = 0; j < datosAImprimir[i].size(); j++)
             {
-                // Imprimimos cada dato separado por ';'
+                // Imprimimos cada dato separado por delimitador
                 archivoExtra << datosAImprimir[i][j];
                 if (j != (datosAImprimir[i].size() - 1))
                 {
-                    archivoExtra << ";";
+                    archivoExtra << delimitador;
                 }
             }
             // Saltamos de linea al terminar una fila
@@ -321,7 +320,7 @@ bool GestorCsv::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImp
     return estadoCreacion;
 }
 
-map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
+map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo, const char &delimitador) {
     map<string, int> mapaConPosiciones;
 
     ifstream archivo(rutaArchivo);
@@ -342,7 +341,7 @@ map<string, int> GestorCsv::conseguirPosicionesColumnas(string &rutaArchivo) {
         getline(archivo, fila);
         streamFila = stringstream(fila);
         columna = 0;
-        while ((getline(streamFila, dato, ';')))
+        while ((getline(streamFila, dato, delimitador)))
         {
             dato = quitarEspacioYAgregarMayus(dato);
             mapaConPosiciones[dato] = columna;

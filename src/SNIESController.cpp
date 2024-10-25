@@ -8,29 +8,6 @@ using namespace std;
 SNIESController::SNIESController()
 {
     gestorCsvObj = new GestorCsv();
-    rutaProgramasCSV = "C:/SNIES_EXTRACTOR/inputs/programas.csv";
-    rutaAdmitidos = "C:/SNIES_EXTRACTOR/inputs/admitidos";
-    rutaGraduados = "C:/SNIES_EXTRACTOR/inputs/graduados";
-    rutaInscritos = "C:/SNIES_EXTRACTOR/inputs/inscritos";
-    rutaMatriculados = "C:/SNIES_EXTRACTOR/inputs/matriculados";
-    rutaMatriculadosPrimerSemestre = "C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre";
-    rutaOutputResultados = "C:/SNIES_EXTRACTOR/outputs/resultados.csv";
-    rutaOutputFiltrado = "C:/SNIES_EXTRACTOR/outputs/buscados.csv";
-}
-
-
-SNIESController::SNIESController(string &nuevaRutaProgramasCSV, string &nuevaRutaAdmitidos, string &nuevaRutaGraduados, string &nuevaRutaInscritos, string &nuevaRutaMatriculadosc, string &nuevaRutaMatriculadosPrimerSemestre, string &nuevaRutaOutput)
-{
-    // FIXME quitar los parámetros de las rutas de los parametros del constructor, usar el archivo de settings.h para poner las constantes
-    gestorCsvObj = new GestorCsv();
-
-    rutaProgramasCSV = nuevaRutaProgramasCSV;
-    rutaAdmitidos = nuevaRutaAdmitidos;
-    rutaGraduados = nuevaRutaGraduados;
-    rutaInscritos = nuevaRutaInscritos;
-    rutaMatriculados = nuevaRutaMatriculadosc;
-    rutaMatriculadosPrimerSemestre = nuevaRutaMatriculadosPrimerSemestre;
-    rutaOutputResultados = nuevaRutaOutput;
 }
 
 SNIESController::~SNIESController()
@@ -42,13 +19,13 @@ SNIESController::~SNIESController()
     }
 }
 
-void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
+void SNIESController::procesarDatosCsv(string &ano1, string &ano2, const char &delimitador)
 {
     vector<vector<string>> programasAcademicosVector;
     int anoInicio = stoi(ano1);
     int anoFin = stoi(ano2);
     // cout << "antes leer programas csv" << endl;
-    vector<int> codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV);
+    vector<int> codigosSnies = gestorCsvObj->leerProgramasCsv(rutaProgramasCSV, delimitador);
 
     for (int i = 0; i < codigosSnies.size(); i++)
     {
@@ -61,34 +38,34 @@ void SNIESController::procesarDatosCsv(string &ano1, string &ano2)
     bool primeraLectura = true;
     for(int ano = anoInicio; ano <= anoFin; ano++) {
         string anoAEvaluar = to_string(ano);
-        gestorCsvObj->leerArchivo(rutaAdmitidos, anoAEvaluar, programasAcademicos, primeraLectura, "admitidos");
+        gestorCsvObj->leerArchivo(rutaAdmitidos, anoAEvaluar, programasAcademicos, primeraLectura, "admitidos", delimitador);
         primeraLectura = false;
-        gestorCsvObj->leerArchivo(rutaGraduados, anoAEvaluar, programasAcademicos, false, "graduados");
-        gestorCsvObj->leerArchivo(rutaInscritos, anoAEvaluar, programasAcademicos, false, "inscritos");
-        gestorCsvObj->leerArchivo(rutaMatriculados, anoAEvaluar, programasAcademicos, false, "matriculados");
-        gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos");
+        gestorCsvObj->leerArchivo(rutaGraduados, anoAEvaluar, programasAcademicos, false, "graduados", delimitador);
+        gestorCsvObj->leerArchivo(rutaInscritos, anoAEvaluar, programasAcademicos, false, "inscritos", delimitador);
+        gestorCsvObj->leerArchivo(rutaMatriculados, anoAEvaluar, programasAcademicos, false, "matriculados", delimitador);
+        gestorCsvObj->leerArchivo(rutaMatriculadosPrimerSemestre, anoAEvaluar, programasAcademicos, false, "neos", delimitador);
     }
 
     string formatoAExportar = exportarEnFormato();
 
     if (formatoAExportar == "1")
     {
-        gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+        gestorCsvObj->crearArchivo(rutaOutputResultados, programasAcademicos, delimitador);
     }
     else if (formatoAExportar == "2")
     {
-        GestorTxt *gestorTxtObj = new GestorTxt();
-        gestorTxtObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+        auto *gestorTxtObj = new GestorTxt();
+        gestorTxtObj->crearArchivo(rutaOutputResultados, programasAcademicos,  delimitador);
     }
     else if (formatoAExportar == "3")
     {
-        GestorJson * gestorJsonObj = new GestorJson();
-        gestorJsonObj->crearArchivo(rutaOutputResultados, programasAcademicos);
+        auto * gestorJsonObj = new GestorJson();
+        gestorJsonObj->crearArchivo(rutaOutputResultados, programasAcademicos, delimitador);
     }
 
 }
 
-void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion)
+void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idComparacion, const char &delimitador)
 {
     map<int, ProgramaAcademico *> mapaProgramasFiltrados;
     for (map<int, ProgramaAcademico *>::iterator it = programasAcademicos.begin(); it != programasAcademicos.end(); ++it)
@@ -100,10 +77,10 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
         {
             mapaProgramasFiltrados[programa->getCodigoSniesDelPrograma()] = programa;
             // codigo SNIES, nombre del programa, codigo de la institucion, nombre de la institucion y metodología
-            cout << programa->getCodigoSniesDelPrograma() << ";"
-                 << programa->getProgramaAcademico() << ";"
-                 << programa->getCodigoDeLaInstitucion() << ";"
-                 << programa->getInstitucionDeEducacionSuperiorIes() << ";"
+            cout << programa->getCodigoSniesDelPrograma() << delimitador
+                 << programa->getProgramaAcademico() << delimitador
+                 << programa->getCodigoDeLaInstitucion() << delimitador
+                 << programa->getInstitucionDeEducacionSuperiorIes() << delimitador
                  << programa->getMetodologia() << endl;
         }
     }
@@ -114,22 +91,22 @@ void SNIESController::buscarProgramas(bool flag, string &palabraClave, int idCom
 
         if (formatoAExportar == "1")
         {
-            gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+            gestorCsvObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados, delimitador);
         }
         else if (formatoAExportar == "2")
         {
-            GestorTxt *gestorTxtObj = new GestorTxt();
-            gestorTxtObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+            auto *gestorTxtObj = new GestorTxt();
+            gestorTxtObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados, delimitador);
         }
         else if (formatoAExportar == "3")
         {
-            GestorJson * gestorJsonObj = new GestorJson();
-            gestorJsonObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados);
+            auto * gestorJsonObj = new GestorJson();
+            gestorJsonObj->crearArchivo(rutaOutputFiltrado, mapaProgramasFiltrados, delimitador);
         }
     }
 }
 
-void SNIESController::calcularDatosExtra(bool flag)
+void SNIESController::calcularDatosExtra(bool flag, const char &delimitador)
 {
     /*
     vector<vector<string>> matrizFinal;
@@ -254,7 +231,7 @@ void SNIESController::calcularDatosExtra(bool flag)
             cout << fila[i];
             if (i < fila.size() - 1)
             {
-                cout << ";";
+                cout << delimitador;
             }
         }
         cout << endl;

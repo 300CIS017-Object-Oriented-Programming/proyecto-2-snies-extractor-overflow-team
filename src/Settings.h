@@ -28,19 +28,27 @@ public:
     static const std::string MATRICULADOS_FILE_PATH;
     static const std::string INSCRITOS_FILE_PATH;
     static const std::string PROGRAMAS_FILTRAR_FILE_PATH;
+    static const std::string MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH;
+    static const std::string GRADUADOS_FILE_PATH;
+    static const std::string RESULTADO_FILE_PATH;
+    static const std::string FILTRADO_FILE_PATH;
     static const std::string BASE_PATH;
-    static const std::string DELIMITADOR;
+    static const char DELIMITADOR;
 
     // FIXME completar para el resto de constantes
 };
 
 // Declaración:
 // Inicialización: La inicialización de estas variables se realiza fuera de la clase. Esto es necesario porque las variables estáticas deben ser definidas en un solo lugar en el archivo de implementación (o en el mismo archivo, pero fuera de la clase) para que el compilador sepa cuánto espacio reservar en memoria.
-const std::string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR/inputs/";
-const std::string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "programas.csv";
-const std::string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "admitidos";
-const std::string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "matriculados";
-const std::string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "inscritos";
-const std::string Settings::DELIMITADOR = ";";
+const std::string Settings::BASE_PATH = "C:/SNIES_EXTRACTOR";
+const std::string Settings::PROGRAMAS_FILTRAR_FILE_PATH = BASE_PATH + "/inputs/programas.csv";
+const std::string Settings::ADMITIDOS_FILE_PATH = BASE_PATH + "/inputs/admitidos";
+const std::string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "/inputs/matriculados";
+const std::string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "/inputs/inscritos";
+const std::string Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH = BASE_PATH + "/inputs/matriculadosPrimerSemestre";
+const std::string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "/inputs/graduados";
+const std::string Settings::RESULTADO_FILE_PATH = BASE_PATH + "/outputs/resultados.csv";
+const std::string Settings::FILTRADO_FILE_PATH = BASE_PATH + "/outputs/ArchivoFiltrado";
+const char Settings::DELIMITADOR = ';';
 
 #endif // SETTINGS_H

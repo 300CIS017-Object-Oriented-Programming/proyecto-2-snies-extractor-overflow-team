@@ -6,6 +6,7 @@
 #define GESTORTXT_H
 
 #include "GestorBase.h"
+
 #include "ProgramaAcademico.h"
 #include <string>
 #include <vector>
@@ -17,8 +18,8 @@ using namespace std;
 class GestorTxt : public GestorBase
 {
 public:
-    void crearArchivo(string&, map<int, ProgramaAcademico*>&) override;
-    bool crearArchivoExtra(string&, vector<vector<string>>) override;
+    void crearArchivo(string&, map<int, ProgramaAcademico*>&, const char &) override;
+    bool crearArchivoExtra(string&, vector<vector<string>>, const char &) override;
 };
 
 #endif //GESTORTXT_H

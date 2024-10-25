@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos)
+void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
     json root; // Objeto principal JSON
     for (const auto &entryPrograma : mapadeProgramasAcademicos)
@@ -85,7 +85,7 @@ void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
     cout << "Archivo JSON creado en: " << ruta << endl;
 }
 
-bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir)
+bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)
 {
     // Este bool nos ayudará a saber si se creó el archivo exitosamente
     bool estadoCreacion = false;
