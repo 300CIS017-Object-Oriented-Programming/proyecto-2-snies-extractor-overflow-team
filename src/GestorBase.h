@@ -11,8 +11,6 @@
 #include <list>
 #include <string>
 
-#include "View.h"
-
 using namespace std;
 
 class GestorBase
