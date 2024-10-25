@@ -22,6 +22,8 @@ private:
     GestorTxt *gestorTxtObj = new GestorTxt();
     GestorJson *gestorJsonObj = new GestorJson();
     vector<string> etiquetasColumnas;
+
+public:
     string rutaProgramasCSV;
     string rutaAdmitidos;
     string rutaGraduados;
@@ -30,10 +32,7 @@ private:
     string rutaMatriculadosPrimerSemestre;
     string rutaOutputResultados;
     string rutaOutputFiltrado;
-
-public:
     SNIESController();
-    SNIESController(string &, string &, string &, string &, string &, string &, string &);
     ~SNIESController();
     void procesarDatosCsv(string &, string &);
     void calcularDatosExtra(bool);
