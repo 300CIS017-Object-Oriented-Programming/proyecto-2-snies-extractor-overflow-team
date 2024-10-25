@@ -1,22 +1,19 @@
 #include "View.h"
+#include "Settings.h"
 
-// Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
-// archivo de configuración
+
 View::View()
 {
-    // NEW quitar estas variables de aquí y del constructor del SNIESController
-    //  estas constantes las leerá el SNIESController del archivo de Settings.h
-    //  Completar el archivo con el resto de constantes necesarias
     controlador = SNIESController();
+    controlador.rutaProgramasCSV = Settings::PROGRAMAS_FILTRAR_FILE_PATH;
+    controlador.rutaAdmitidos = Settings::ADMITIDOS_FILE_PATH;
+    controlador.rutaGraduados = Settings::GRADUADOS_FILE_PATH;
+    controlador.rutaInscritos = Settings::INSCRITOS_FILE_PATH;
+    controlador.rutaMatriculados = Settings::MATRICULADOS_FILE_PATH;
+    controlador.rutaMatriculadosPrimerSemestre = Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH;
+    controlador.rutaOutputResultados = Settings::RESULTADO_FILE_PATH;
+    controlador.rutaOutputFiltrado = Settings::FILTRADO_FILE_PATH;
 }
-
-// Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
-//  del View sea por defecto y el de controlador se llame automáticamente al salir del programa
-View::~View()
-{
-    controlador.~SNIESController();
-}
-
 
 bool View::mostrarPantallaBienvenido()
 {
