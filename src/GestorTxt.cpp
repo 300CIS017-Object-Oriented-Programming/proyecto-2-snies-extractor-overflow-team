@@ -11,7 +11,8 @@ using namespace std;
 
 void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
-    ofstream archivoResultados(ruta);
+    string rutaCompleta = ruta + ".txt";
+    ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
     {
         // Imprimimos en el archivo las etiquetas (Primera fila)
@@ -121,7 +122,7 @@ void GestorTxt::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
             }
         }
         // Imprimimos ruta donde quedó el archivo
-        cout << "Archivo TXT Creado en: " << ruta << endl;
+        cout << "Archivo TXT Creado en: " << rutaCompleta << endl;
     }
     archivoResultados.close();
 }

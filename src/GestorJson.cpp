@@ -10,6 +10,7 @@ using namespace std;
 
 void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos, const char &delimitador)
 {
+    string rutaCompleta;
     json root; // Objeto principal JSON
     for (const auto &entryPrograma : mapadeProgramasAcademicos)
     {
@@ -78,11 +79,12 @@ void GestorJson::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapad
         root["Programas"].push_back(jsonPrograma);
     }
     // Guardamos el archivo JSON
-    std::ofstream archivoResultados(ruta);
+    rutaCompleta = ruta + ".json";
+    std::ofstream archivoResultados(rutaCompleta);
     archivoResultados << root.dump(4); // 4 es el nivel de indentación
     archivoResultados.close();
     // Imprimimos ruta donde quedó el archivo
-    cout << "Archivo JSON creado en: " << ruta << endl;
+    cout << "Archivo JSON creado en: " << rutaCompleta << endl;
 }
 
 bool GestorJson::crearArchivoExtra(string &ruta, vector<vector<string>> datosAImprimir, const char &delimitador)

@@ -47,7 +47,7 @@ const std::string Settings::MATRICULADOS_FILE_PATH = BASE_PATH + "/inputs/matric
 const std::string Settings::INSCRITOS_FILE_PATH = BASE_PATH + "/inputs/inscritos";
 const std::string Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH = BASE_PATH + "/inputs/matriculadosPrimerSemestre";
 const std::string Settings::GRADUADOS_FILE_PATH = BASE_PATH + "/inputs/graduados";
-const std::string Settings::RESULTADO_FILE_PATH = BASE_PATH + "/outputs/resultados.csv";
+const std::string Settings::RESULTADO_FILE_PATH = BASE_PATH + "/outputs/resultados";
 const std::string Settings::FILTRADO_FILE_PATH = BASE_PATH + "/outputs/ArchivoFiltrado";
 const char Settings::DELIMITADOR = ';';
 

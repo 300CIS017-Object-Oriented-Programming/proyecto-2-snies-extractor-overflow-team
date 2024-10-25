@@ -162,7 +162,8 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
 
 void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapadeProgramasAcademicos,const char &delimitador)
 {
-    ofstream archivoResultados(ruta);
+    string rutaCompleta = ruta + ".csv";
+    ofstream archivoResultados(rutaCompleta);
     if (archivoResultados.is_open())
     {
         // Imprimimos en el archivo las etiquetas (Primera fila)
@@ -279,7 +280,7 @@ void GestorCsv::crearArchivo(string &ruta, map<int, ProgramaAcademico *> &mapade
         }
 
         // Imprimimos ruta donde quedo el archivo
-        cout << "Archivo Creado en: " << ruta << endl;
+        cout << "Archivo Creado en: " << rutaCompleta << endl;
     }
 
     archivoResultados.close();
