@@ -12,6 +12,7 @@ class View
 {
 private:
     SNIESController controlador;
+    std::string delimitador;
 
 public:
     View();
@@ -20,6 +21,8 @@ public:
     bool mostrarPantallaBienvenido();
     void mostrarDatosExtra();
     void buscarPorPalabraClaveYFormacion();
+    void setDelimitador(const char &);
+    char getDelimitador() const;
     void salir();
     // Recomendación Linter: La función isConvetibleToInt debería ser privada.
     bool isConvetibleToInt(const string &);

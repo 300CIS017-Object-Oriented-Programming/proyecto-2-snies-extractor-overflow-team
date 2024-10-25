@@ -13,6 +13,15 @@ View::View()
     controlador.rutaMatriculadosPrimerSemestre = Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH;
     controlador.rutaOutputResultados = Settings::RESULTADO_FILE_PATH;
     controlador.rutaOutputFiltrado = Settings::FILTRADO_FILE_PATH;
+    delimitador = Settings::DELIMITADOR;
+}
+void View::setDelimitador(const char &delimitador)
+{
+    this->delimitador = delimitador;
+}
+
+char View::getDelimitador() const {
+    return delimitador;
 }
 
 bool View::mostrarPantallaBienvenido()
