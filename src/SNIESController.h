@@ -9,31 +9,35 @@
 #include "ProgramaAcademico.h"
 #include "Consolidado.h"
 #include "GestorCsv.h"
+#include "GestorTxt.h"
+#include "GestorJson.h"
 
 using namespace std;
 
 class SNIESController
 {
-
 private:
     map<int, ProgramaAcademico *> programasAcademicos;
-    GestorCsv gestorCsvObj;
+    GestorCsv *gestorCsvObj = new GestorCsv();
+    GestorTxt *gestorTxtObj = new GestorTxt();
+    GestorJson *gestorJsonObj = new GestorJson();
     vector<string> etiquetasColumnas;
+
+public:
     string rutaProgramasCSV;
     string rutaAdmitidos;
     string rutaGraduados;
     string rutaInscritos;
     string rutaMatriculados;
     string rutaMatriculadosPrimerSemestre;
-    string rutaOutput;
-
-public:
-    SNIESController() = default;
-    SNIESController(string &, string &, string &, string &, string &, string &, string &);
+    string rutaOutputResultados;
+    string rutaOutputFiltrado;
+    SNIESController();
     ~SNIESController();
-    void procesarDatosCsv(string &, string &);
-    void calcularDatosExtra(bool);
-    void buscarProgramas(bool, string &, int);
+    void procesarDatosCsv(string &, string &, const char &);
+    void calcularDatosExtra(bool, const char &);
+    void buscarProgramas(bool, string &, int, const char &);
+    string exportarEnFormato();
 };
 
 #endif

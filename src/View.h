@@ -12,10 +12,9 @@ class View
 {
 private:
     SNIESController controlador;
-
 public:
     View();
-    ~View();
+    ~View()=default;
     // Estructura: El View debería tener solo una función pública.
     bool mostrarPantallaBienvenido();
     void mostrarDatosExtra();

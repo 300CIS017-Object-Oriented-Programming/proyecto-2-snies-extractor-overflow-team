@@ -2,10 +2,6 @@
 
 using namespace std;
 
-ProgramaAcademico::ProgramaAcademico()
-{
-    consolidados = vector<Consolidado *>(8);
-}
 
 void ProgramaAcademico::setCodigoDeLaInstitucion(int nuevoCodigoDeLaInstitucion)
 {
@@ -138,12 +134,12 @@ int ProgramaAcademico::getCodigoSniesDelPrograma()
 
 void ProgramaAcademico::setProgramaAcademico(string &nuevoProgramaAcademico)
 {
-    programaAcademico = nuevoProgramaAcademico;
+    a = nuevoProgramaAcademico;
 }
 
 string ProgramaAcademico::getProgramaAcademico()
 {
-    return programaAcademico;
+    return a;
 }
 
 void ProgramaAcademico::setIdNivelAcademico(int nuevoIdNivelAcademico)
@@ -334,20 +330,120 @@ string ProgramaAcademico::getMunicipioDeOfertaDelPrograma()
     return municipioDeOfertaDelPrograma;
 }
 
-void ProgramaAcademico::setConsolidado(Consolidado *nuevoConsolidado, int pos)
+void ProgramaAcademico::setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado)
 {
-    consolidados[pos] = nuevoConsolidado;
+    mapConsolidados[anio][idSexo][semestre] = consolidado;
 }
 
-Consolidado *ProgramaAcademico::getConsolidado(int posicionConsolidado)
+Consolidado * ProgramaAcademico::getConsolidadoDeMapa(int anio, int idSexo, int semestre)
+// (Función solicitada a ChatGPT)
+// Evalúa si el consolidado existe para que no se creen entradas indeseadas cómo cuando se accede con []
 {
-    return consolidados[posicionConsolidado];
+    // Verificamos si existe el anio
+    auto itAnio = mapConsolidados.find(anio);
+    if (itAnio != mapConsolidados.end()) {
+        // Verificamos si existe el idSexo dentro del anio
+        auto itSexo = itAnio->second.find(idSexo);
+        if (itSexo != itAnio->second.end()) {
+            // Verificamos si existe el semestre dentro del idSexo
+            auto itSemestre = itSexo->second.find(semestre);
+            if (itSemestre != itSexo->second.end()) {
+                // Si lo anterior existe, devolvemos el Consolidado correspondiente
+                return itSemestre->second;
+            }
+        }
+    }
+    // Si no existe la combinación de claves, retornamos nullptr
+    return nullptr;
+}
+
+map<int, map<int, map<int, Consolidado *> > > ProgramaAcademico::getMapaDeConsolidados() {
+    return mapConsolidados;
+}
+
+void ProgramaAcademico::setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones)
+{
+    codigoDeLaInstitucion = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DE_LA_INSTITUCIÓN" ]]);         // CÓDIGO DE LA INSTITUCIÓN
+    iesPadre = stoi(vectorConInfo[mapPosiciones["IES_PADRE"]]);                      // IES_PADRE
+    institucionDeEducacionSuperiorIes = vectorConInfo[mapPosiciones["INSTITUCIÓN_DE_EDUCACIÓN_SUPERIOR_(IES)"]];   // INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES)
+    principalOSeccional = vectorConInfo[mapPosiciones["PRINCIPAL_O_SECCIONAL"]];                 // PRINCIPAL O SECCIONAL
+    idSectorIes = stoi(vectorConInfo[mapPosiciones["ID_SECTOR_IES"]]);                   // ID SECTOR IES
+    sectorIes = vectorConInfo[mapPosiciones["SECTOR_IES"]];                           // SECTOR IES
+    idCaracter = stoi(vectorConInfo[mapPosiciones["ID_CARACTER"]]);                    // ID CARÁCTER
+    caracterIes = vectorConInfo[mapPosiciones["CARACTER_IES"]];                         // CARACTER IES
+    codigoDelDepartamentoIes = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_DEPARTAMENTO_(IES)"]]);      // CÓDIGO DEL DEPARTAMENTO (IES)
+    departamentoDeDomicilioDeLaIes = vectorConInfo[mapPosiciones["DEPARTAMENTO_DE_DOMICILIO_DE_LA_IES"]];      // DEPARTAMENTO DE DOMICILIO DE LA IES
+    codigoDelMunicipioIes = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_MUNICIPIO_(IES)"]]);        // CÓDIGO DEL MUNICIPIO IES
+    municipioDeDomicilioDeLaIes = vectorConInfo[mapPosiciones["MUNICIPIO_DE_DOMICILIO_DE_LA_IES"]];        // MUNICIPIO DE DOMICILIO DE LA IES
+    codigoSniesDelPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_SNIES_DEL_PROGRAMA"]]);       // CÓDIGO SNIES DEL PROGRAMA
+    a = vectorConInfo[mapPosiciones["PROGRAMA_ACADÉMICO"]];                                  // PROGRAMA ACADÉMICO
+    idNivelAcademico = stoi(vectorConInfo[mapPosiciones["ID_NIVEL_ACADÉMICO"]]);             // ID NIVEL ACADÉMICO
+    nivelAcademico = vectorConInfo[mapPosiciones["NIVEL_ACADÉMICO"]];                     // NIVEL ACADÉMICO
+    idNivelDeFormacion = stoi(vectorConInfo[mapPosiciones["ID_NIVEL_DE_FORMACIÓN"]]);             // ID NIVEL DE FORMACIÓN
+    nivelDeFormacion = vectorConInfo[mapPosiciones["NIVEL_DE_FORMACIÓN"]];                   // NIVEL DE FORMACIÓN
+    idMetodologia = stoi(vectorConInfo[mapPosiciones["ID_METODOLOGÍA"]]);                // ID METODOLOGÍA
+    metodologia = vectorConInfo[mapPosiciones["METODOLOGÍA"]];                        // METODOLOGÍA
+    idArea = stoi(vectorConInfo[mapPosiciones["ID_ÁREA_DE_CONOCIMIENTO"]]);                       // ID ÁREA
+    areaDeConocimiento = vectorConInfo[mapPosiciones["ÁREA_DE_CONOCIMIENTO"]];                 // ÁREA DE CONOCIMIENTO
+    idNucleo = stoi(vectorConInfo[mapPosiciones["ID_NÚCLEO"]]);                     // ID NÚCLEO
+    nucleoBasicoDelConocimientoNbc = vectorConInfo[mapPosiciones["NÚCLEO_BÁSICO_DEL_CONOCIMIENTO_(NBC)"]];     // NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC)
+    idCineCampoAmplio = stoi(vectorConInfo[mapPosiciones["ID_CINE_CAMPO_AMPLIO"]]);            // ID CINE CAMPO AMPLIO
+    descCineCampoAmplio = vectorConInfo[mapPosiciones["DESC_CINE_CAMPO_AMPLIO"]];                // DESC CINE CAMPO AMPLIO
+    idCineCampoEspecifico = stoi(vectorConInfo[mapPosiciones["ID_CINE_CAMPO_ESPECIFICO"]]);        // ID CINE CAMPO ESPECÍFICO
+    descCineCampoEspecifico = vectorConInfo[mapPosiciones["DESC_CINE_CAMPO_ESPECIFICO"]];            // DESC CINE CAMPO ESPECÍFICO
+    idCineCodigoDetallado = stoi(vectorConInfo[mapPosiciones["ID_CINE_CODIGO_DETALLADO"]]);        // ID CINE CÓDIGO DETALLADO
+    descCineCodigoDetallado = vectorConInfo[mapPosiciones["DESC_CINE_CODIGO_DETALLADO"]];            // DESC CINE CÓDIGO DETALLADO
+    codigoDelDepartamentoPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_DEPARTAMENTO_(PROGRAMA)"]]);    // CÓDIGO DEL DEPARTAMENTO (PROGRAMA)
+    departamentoDeOfertaDelPrograma = vectorConInfo[mapPosiciones["DEPARTAMENTO_DE_OFERTA_DEL_PROGRAMA"]];    // DEPARTAMENTO DE OFERTA DEL PROGRAMA
+    codigoDelMunicipioPrograma = stoi(vectorConInfo[mapPosiciones["CÓDIGO_DEL_MUNICIPIO_(PROGRAMA)"]]);   // CÓDIGO DEL MUNICIPIO (PROGRAMA)
+    municipioDeOfertaDelPrograma = vectorConInfo[mapPosiciones["MUNICIPIO_DE_OFERTA_DEL_PROGRAMA"]];       // MUNICIPIO DE OFERTA DEL PROGRAMA
 }
 
 ProgramaAcademico::~ProgramaAcademico()
 {
-    for (Consolidado *consolidado : consolidados)
-    {
-        delete consolidado;
-    }
+
 }
+
+
+/*
+    CÓDIGO DE LA INSTITUCIÓN;
+    CÓDIGO DE LA INSTITUCIÓN;
+    IES_PADRE;
+    INSTITUCIÓN DE EDUCACIÓN SUPERIOR (IES);
+    PRINCIPAL O SECCIONAL;
+    ID SECTOR IES;
+    SECTOR IES;
+    ID CARACTER;
+    CARACTER IES;
+    CÓDIGO DEL DEPARTAMENTO (IES);
+    DEPARTAMENTO DE DOMICILIO DE LA IES;
+    CÓDIGO DEL MUNICIPIO IES;
+    MUNICIPIO DE DOMICILIO DE LA IES;
+    CÓDIGO SNIES DEL PROGRAMA;
+    PROGRAMA ACADÉMICO;
+    ID NIVEL ACADÉMICO;
+    NIVEL ACADÉMICO;
+    ID NIVEL DE FORMACIÓN;
+    NIVEL DE FORMACIÓN;
+    ID METODOLOGÍA;
+    METODOLOGÍA;
+    ID ÁREA;
+    ÁREA DE CONOCIMIENTO;
+    ID NÚCLEO;
+    NÚCLEO BÁSICO DEL CONOCIMIENTO (NBC);
+    ID CINE CAMPO AMPLIO;
+    DESC CINE CAMPO AMPLIO;
+    ID CINE CAMPO ESPECIFICO;
+    DESC CINE CAMPO ESPECIFICO;
+    ID CINE CODIGO DETALLADO;
+    DESC CINE CODIGO DETALLADO;
+    CÓDIGO DEL DEPARTAMENTO (PROGRAMA);
+    DEPARTAMENTO DE OFERTA DEL PROGRAMA;
+    CÓDIGO DEL MUNICIPIO (PROGRAMA);
+    MUNICIPIO DE OFERTA DEL PROGRAMA;
+    ID SEXO;
+    SEXO;
+    AÑO;
+    SEMESTRE;
+    ADMITIDOS;
+     */

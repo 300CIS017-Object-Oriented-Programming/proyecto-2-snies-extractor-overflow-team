@@ -36,3 +36,5 @@ build/
 .vscode/
 .idea/
 CMakeCache.txt
+/cmake-build-debug/
+/docs/auto_y_coevaluacion_by_Esteban_Castro.md

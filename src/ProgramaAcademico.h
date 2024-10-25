@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <iostream>
 #include "Consolidado.h"
 
@@ -11,6 +12,7 @@ using std::cout;
 using std::endl;
 using std::string;
 using std::vector;
+using std::map;
 
 class ProgramaAcademico
 {
@@ -27,7 +29,7 @@ class ProgramaAcademico
     int codigoDelMunicipioIes;
     string municipioDeDomicilioDeLaIes;
     int codigoSniesDelPrograma;
-    string programaAcademico;
+    string a;
     int idNivelAcademico;
     string nivelAcademico;
     int idNivelDeFormacion;
@@ -48,10 +50,12 @@ class ProgramaAcademico
     string departamentoDeOfertaDelPrograma;
     int codigoDelMunicipioPrograma;
     string municipioDeOfertaDelPrograma;
-    vector<Consolidado *> consolidados;
+
+    map<int, map<int, map<int, Consolidado *>>> mapConsolidados;
 
 public:
-    ProgramaAcademico();
+    ProgramaAcademico() = default;
+    ~ProgramaAcademico();
 
     void setCodigoDeLaInstitucion(int);
     int getCodigoDeLaInstitucion();
@@ -114,35 +118,53 @@ public:
 
     void setIdArea(int);
     int getIdArea();
+
     void setAreaDeConocimiento(string &);
     string getAreaDeConocimiento();
+
     void setIdNucleo(int);
     int getIdNucleo();
+
     void setNucleoBasicoDelConocimientoNbc(string &);
     string getNucleoBasicoDelConocimientoNbc();
+
     void setIdCineCampoAmplio(int);
     int getIdCineCampoAmplio();
+
     void setDescCineCampoAmplio(string &);
     string getDescCineCampoAmplio();
+
     void setIdCineCampoEspecifico(int);
     int getIdCineCampoEspecifico();
+
     void setDescCineCampoEspecifico(string &);
     string getDescCineCampoEspecifico();
+
     void setIdCineCodigoDetallado(int);
     int getIdCineCodigoDetallado();
+
     void setDescCineCodigoDetallado(string &);
     string getDescCineCodigoDetallado();
+
     void setCodigoDelDepartamentoPrograma(int);
     int getCodigoDelDepartamentoPrograma();
+
     void setDepartamentoDeOfertaDelPrograma(string &);
     string getDepartamentoDeOfertaDelPrograma();
+
     void setCodigoDelMunicipioPrograma(int);
     int getCodigoDelMunicipioPrograma();
+
     void setMunicipioDeOfertaDelPrograma(string &);
     string getMunicipioDeOfertaDelPrograma();
-    void setConsolidado(Consolidado *, int);
-    Consolidado *getConsolidado(int);
-    ~ProgramaAcademico();
+
+
+    Consolidado * getConsolidadoDeMapa(int anio, int idSexo, int semestre);
+    map<int, map<int, map<int, Consolidado *>>> getMapaDeConsolidados();
+
+    void setMapConsolidados(int anio, int idSexo, int semestre, Consolidado *consolidado);
+    void setTodoElProgramaAcademico(vector<string> vectorConInfo, map<string, int> mapPosiciones);
+
 };
 
 #endif

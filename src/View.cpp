@@ -1,32 +1,23 @@
 #include "View.h"
+#include "Settings.h"
 
-// Mantenimiento: Implementar la lectura de las rutas de los archivos CSV desde un
-// archivo de configuración
+
 View::View()
 {
-    // NEW quitar estas variables de aquí y del constructor del SNIESController
-    //  estas constantes las leerá el SNIESController del archivo de Settings.h
-    //  Completar el archivo con el resto de constantes necesarias
-    string ruta1 = string("C:/SNIES_EXTRACTOR/inputs/programas.csv");
-    string ruta2 = string("C:/SNIES_EXTRACTOR/inputs/admitidos");
-    string ruta3 = string("C:/SNIES_EXTRACTOR/inputs/graduados");
-    string ruta4 = string("C:/SNIES_EXTRACTOR/inputs/inscritos");
-    string ruta5 = string("C:/SNIES_EXTRACTOR/inputs/matriculados");
-    string ruta6 = string("C:/SNIES_EXTRACTOR/inputs/matriculadosPrimerSemestre");
-    string ruta7 = string("C:/SNIES_EXTRACTOR/outputs/");
-    controlador = SNIESController(ruta1, ruta2, ruta3, ruta4, ruta5, ruta6, ruta7);
+    controlador = SNIESController();
+    controlador.rutaProgramasCSV = Settings::PROGRAMAS_FILTRAR_FILE_PATH;
+    controlador.rutaAdmitidos = Settings::ADMITIDOS_FILE_PATH;
+    controlador.rutaGraduados = Settings::GRADUADOS_FILE_PATH;
+    controlador.rutaInscritos = Settings::INSCRITOS_FILE_PATH;
+    controlador.rutaMatriculados = Settings::MATRICULADOS_FILE_PATH;
+    controlador.rutaMatriculadosPrimerSemestre = Settings::MATRICULADOS_PRIMER_SEMESTRE_FILE_PATH;
+    controlador.rutaOutputResultados = Settings::RESULTADO_FILE_PATH;
+    controlador.rutaOutputFiltrado = Settings::FILTRADO_FILE_PATH;
+
 }
-
-// Mantenimiento: No llamar al destructor de la clase controlador, hacer que el destructor
-//  del View sea por defecto y el de controlador se llame automáticamente al salir del programa
-View::~View()
-{
-    controlador.~SNIESController();
-}
-
-
 bool View::mostrarPantallaBienvenido()
 {
+    const char delimitador = Settings::DELIMITADOR;
     // Mantenimiento: Nombre confuso de la variable, cambiar a algo más descriptivo
     bool parametrizacionBool = false;
 
@@ -35,7 +26,7 @@ bool View::mostrarPantallaBienvenido()
     cout << "Recuerde que para el correcto funcionamiento del programa tuvo que haber parametrizado" << endl;
     cout << "antes la carpeta SNIES_EXTRACTOR en el disco duro C:, con sus respectivas carpetas inputs y outputs" << endl;
     cout << "y todos los archivo CSV del SNIES." << endl;
-    cout << "Si ya hizo esto, escriba 'Y', de lo contrario 'N', y Enter: " << end;
+    cout << "Si ya hizo esto, escriba 'Y', de lo contrario 'N', y Enter: " << endl;
     char userAnswer = 'Y';
     // cin >> userAnswer;
     // cout << endl;
@@ -51,7 +42,6 @@ bool View::mostrarPantallaBienvenido()
         // y quitar las variables que no se usan
         string anio1("abc");
         string ano2("abc");
-        string anoAux;
         int i = 0;
         bool anosValido = false;
         // FIXME pasar la lógica del bucle a un método reutlizable
@@ -98,13 +88,11 @@ bool View::mostrarPantallaBienvenido()
         // Mantenimiento: Simplificar el código, implementar o usar funciones auxiliares como swap
         if (stoi(ano2) < stoi(anio1))
         {
-            anoAux = anio1;
-            anio1 = ano2;
-            ano2 = anoAux;
+            swap(anio1,ano2);
         }
 
         cout << "Procesando datos ..." << endl;
-        controlador.procesarDatosCsv(anio1, ano2);
+        controlador.procesarDatosCsv(anio1, ano2, delimitador);
         cout << "Datos procesados con exito!" << endl;
     }
     return parametrizacionBool;
@@ -135,12 +123,12 @@ void View::mostrarDatosExtra()
     // Simplificar el código de acuerdo a ese ajuste
     if (opcionYN == 'y')
     {
-        controlador.calcularDatosExtra(true);
+        //controlador.calcularDatosExtra(true);
     }
 
     else
     {
-        controlador.calcularDatosExtra(false);
+        //controlador.calcularDatosExtra(false);
     }
 }
 
@@ -149,6 +137,7 @@ void View::buscarPorPalabraClaveYFormacion()
 {
     // Mantenimiento: La variable opcionYN se relaciona con otra de otros métodos, pero no tienen el
     // mismo nombre, la estructura es confusa.
+    const char delimitador = Settings::DELIMITADOR;
     char opcionYN = 'y', opcionCSV;
     string palabraClave;
     bool convertirCSV;
@@ -165,20 +154,6 @@ void View::buscarPorPalabraClaveYFormacion()
         // Alta complejidad ciclomática, refactorizar
         if (opcionYN == 'y')
         {
-            cout << "Deseas convertir convertir los datos del programa academico a un CSV?(Y/N): " << endl;
-            cin >> opcionCSV;
-            cout << "\n";
-            opcionCSV = tolower(opcionCSV);
-
-            if (opcionCSV == 'y')
-            {
-                convertirCSV = true;
-            }
-
-            else
-            {
-                convertirCSV = false;
-            }
             // Coesión y Organización: Baja coesión, este metodo hace cosas que no debería,
             // separar en métodos más pequeños
             cout << "Escriba la palabra clave para buscar los programas por nombre:" << endl;
@@ -195,7 +170,22 @@ void View::buscarPorPalabraClaveYFormacion()
                 cin >> idFormacionAcademica;
             }
 
-            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica);
+            cout << "Deseas exportar los datos del programa academico en un archivo?(Y/N): " << endl;
+            cin >> opcionCSV;
+            cout << "\n";
+            opcionCSV = tolower(opcionCSV);
+
+            if (opcionCSV == 'y')
+            {
+                convertirCSV = true;
+            }
+
+            else
+            {
+                convertirCSV = false;
+            }
+
+            controlador.buscarProgramas(convertirCSV, palabraClave, idFormacionAcademica, delimitador);
         }
     }
 }
