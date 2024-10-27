@@ -38,7 +38,6 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
     int POS_COD_SNIES = posicionesColumnasMap["CÓDIGO_SNIES_DEL_PROGRAMA"];
     int POS_ID_SEXO = posicionesColumnasMap["ID_SEXO"];
     int POS_SEXO = posicionesColumnasMap["SEXO"];
-    int POS_ANIO = posicionesColumnasMap["AÑO"];
     int POS_SEMESTRE = posicionesColumnasMap["SEMESTRE"];
     int POS_ULTIMA_COLUMNA = POS_SEMESTRE + 1;
     int TAMANIO_ARCHIVO = conseguirCantColumnas(posicionesColumnasMap) + 1;
@@ -120,7 +119,7 @@ void GestorCsv::leerArchivo(string &rutaBase, string &ano, map<int, ProgramaAcad
                 int COD_SNIES = stoi(vectorFila[POS_COD_SNIES]);
                 int ID_SEXO = stoi(vectorFila[POS_ID_SEXO]);
                 string SEXO = vectorFila[POS_SEXO];
-                int ANIO = stoi(vectorFila[POS_ANIO]);
+                int ANIO = stoi(ano);               // Para que se guarde en el consolidado el año actual mas no el del archivo.
                 int SEMESTRE = stoi(vectorFila[POS_SEMESTRE]);
                 int ULTIMA_COLUMNA = stoi(vectorFila[POS_ULTIMA_COLUMNA]);
 
